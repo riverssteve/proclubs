@@ -383,8 +383,8 @@ const PlayerStatsDashboard: React.FC = () => {
                 data={getComparisonData()}
                 layout="vertical"
                 margin={{
-                  left: 80,
-                  right: 70
+                  left: 60,
+                  right: 30
                 }}
               >
                 <XAxis
@@ -392,6 +392,7 @@ const PlayerStatsDashboard: React.FC = () => {
                   dataKey="value"
                   domain={[0, 'dataMax']}
                   tickCount={5}
+                  interval={0}
                   hide
                 />
                 <YAxis
@@ -400,7 +401,8 @@ const PlayerStatsDashboard: React.FC = () => {
                   tickLine={false}
                   tickMargin={10}
                   axisLine={false}
-                  tickFormatter={(value) => value}
+                  interval={0}
+                  includeHidden
                 />
                 <Bar
                   dataKey="value"
@@ -617,12 +619,16 @@ const PlayerStatsDashboard: React.FC = () => {
                       right: 50
                     }}
                   >
-                    <XAxis hide />
+                    <XAxis
+                      interval={0}
+                      hide
+                    />
                     <YAxis
                       dataKey="match"
                       type="category"
                       tickLine={false}
                       tickMargin={10}
+                      interval={0}
                       axisLine={false}
                     />
                     <Bar
