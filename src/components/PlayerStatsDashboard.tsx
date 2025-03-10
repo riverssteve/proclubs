@@ -262,7 +262,7 @@ const PlayerStatsDashboard: React.FC = () => {
 
     return data.members.map(player => ({
       name: player.name,
-      value: parseInt(player[comparisonStat as keyof PlayerStats] as string) || 0,
+      value: parseFloat(player[comparisonStat as keyof PlayerStats] as string) || 0,
       position: player.favoritePosition
     })).sort((a, b) => b.value - a.value);
   };
@@ -274,7 +274,7 @@ const PlayerStatsDashboard: React.FC = () => {
       const key = `prevGoals${i}` as keyof PlayerStats;
       return {
         match: `Match ${i}`,
-        goals: parseInt(selectedPlayer[key] as string) || 0
+        goals: parseFloat(selectedPlayer[key] as string) || 0
       };
     }).reverse();
   };
@@ -415,7 +415,11 @@ const PlayerStatsDashboard: React.FC = () => {
                     offset={8}
                     className="fill-foreground"
                     fontSize={12}
-                    formatter={(value: number) => value > 0 ? value : ''}
+                    formatter={(value: number) => {
+                      if (value <= 0) return '';
+                      // Check if value has decimal part
+                      return value % 1 !== 0 ? value.toFixed(1) : value;
+                    }}
                   />
                 </Bar>
               </BarChart>
@@ -616,7 +620,7 @@ const PlayerStatsDashboard: React.FC = () => {
                     layout="vertical"
                     margin={{
                       left: 20,
-                      right: 50
+                      right: 20
                     }}
                   >
                     <XAxis
@@ -642,7 +646,11 @@ const PlayerStatsDashboard: React.FC = () => {
                         offset={8}
                         className="fill-foreground"
                         fontSize={12}
-                        formatter={(value: number) => value > 0 ? value : ''}
+                        formatter={(value: number) => {
+                          if (value <= 0) return '';
+                          // Check if value has decimal part
+                          return value % 1 !== 0 ? value.toFixed(1) : value;
+                        }}
                       />
                     </Bar>
                   </BarChart>
@@ -651,8 +659,9 @@ const PlayerStatsDashboard: React.FC = () => {
                   <p className="font-medium">Total goals in last 10 matches: {
                     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reduce((sum, i) => {
                       const key = `prevGoals${i}` as keyof PlayerStats;
-                      return sum + (parseInt(selectedPlayer[key] as string) || 0);
-                    }, 0)
+                      const value = parseFloat(selectedPlayer[key] as string) || 0;
+                      return sum + value;
+                    }, 0).toFixed(1).replace(/\.0$/, '')
                   }</p>
                 </div>
               </CardContent>
