@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Label, Pie, PieChart } from "recharts";
 import { Button } from '@/components/ui/button';
 
 // Royal Rumballers club ID
@@ -77,6 +79,10 @@ const TeamSummary: React.FC = () => {
   const [data, setData] = useState<TeamStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const gamesPlayed = React.useMemo(() => {
+    return data?.gamesPlayed || "0";
+  }, [data]);
 
   useEffect(() => {
     console.log("Component mounted, fetching data");
@@ -161,6 +167,29 @@ const TeamSummary: React.FC = () => {
     </div>
   );
 
+  const chartData = [
+    { category: "wins", percentage: parseInt(data.wins || "0"), fill: "oklch(0.65 0.2 240)" },
+    { category: "losses", percentage: parseInt(data.losses || "0"), fill: "oklch(0.35 0.1 240)" },
+    { category: "draws", percentage: parseInt(data.ties || "0"), fill: "oklch(0.5 0.15 240)" },
+  ]
+  const chartConfig = {
+    visitors: {
+      label: "Visitors",
+    },
+    wins: {
+      label: "Wins",
+      color: "hsl(var(--chart-1))",
+    },
+    losses: {
+      label: "Losses",
+      color: "hsl(var(--chart-2))",
+    },
+    draws: {
+      label: "Draws",
+      color: "hsl(var(--chart-3))",
+    },
+  } satisfies ChartConfig
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col items-center justify-center mb-12">
@@ -223,33 +252,60 @@ const TeamSummary: React.FC = () => {
             <CardDescription>Win/Loss statistics</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">Games Played:</span>
-                <span>{data.gamesPlayed}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Wins:</span>
-                <span className="text-green-600 font-bold">{data.wins}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Draws:</span>
-                <span className="text-yellow-600">{data.ties}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Losses:</span>
-                <span className="text-red-600">{data.losses}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Win Rate:</span>
-                <span>
-                  {parseInt(data.gamesPlayed) > 0
-                    ? ((parseInt(data.wins) / parseInt(data.gamesPlayed)) * 100).toFixed(1) + '%'
-                    : '0.0%'}
-                </span>
-              </div>
-            </div>
+            <ChartContainer
+              config={chartConfig}
+              className="flex-1 pb-0"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={chartData}
+                  dataKey="percentage"
+                  nameKey="category"
+                  innerRadius={50}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-bold"
+                            >
+                              {gamesPlayed.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              played
+                            </tspan>
+                          </text>
+                        )
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
           </CardContent>
+          <CardFooter className="flex justify-between">
+            <span className="font-medium">Win Percentage:</span>
+            <span className="font-bold text-green-600">
+              {((parseInt(data.wins) / parseInt(data.gamesPlayed)) * 100).toFixed(1)}%
+            </span>
+          </CardFooter>
         </Card>
 
         <Card>
