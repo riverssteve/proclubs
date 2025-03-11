@@ -406,7 +406,7 @@ const PlayerStatsDashboard: React.FC = () => {
                 />
                 <Bar
                   dataKey="value"
-                  fill="var(--score-win-primary)"
+                  fill="var(--chart-1)"
                   radius={4}
                 >
                   <LabelList
@@ -548,8 +548,8 @@ const PlayerStatsDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold mb-2 text-green-800">Offensive Stats</h3>
+                  <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
+                    <h3 className="text-lg font-bold mb-2 text-green-800 dark:text-green-200">Offensive Stats</h3>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Goals:</span>
@@ -566,8 +566,8 @@ const PlayerStatsDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold mb-2 text-blue-800">Passing Stats</h3>
+                  <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
+                    <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-200">Passing Stats</h3>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Passes Made:</span>
@@ -580,8 +580,8 @@ const PlayerStatsDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="bg-red-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold mb-2 text-red-800">Defensive Stats</h3>
+                  <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg">
+                    <h3 className="text-lg font-bold mb-2 text-red-800 dark:text-red-200">Defensive Stats</h3>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Tackles Made:</span>
@@ -637,7 +637,7 @@ const PlayerStatsDashboard: React.FC = () => {
                     />
                     <Bar
                       dataKey="goals"
-                      fill="var(--score-win-primary)"
+                      fill="var(--chart-1)"
                       radius={4}
                     >
                       <LabelList

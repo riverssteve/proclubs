@@ -3,7 +3,7 @@ import TeamSummary from '@/components/TeamSummary';
 
 export default function Home(): React.ReactNode {
   return (
-    <main className="min-h-screen white">
+    <main className="min-h-screen bg-background">
       <TeamSummary />
     </main>
   );

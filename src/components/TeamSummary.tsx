@@ -143,7 +143,8 @@ const TeamSummary: React.FC = () => {
       const result = data[key];
       return {
         result: result === "1" ? "W" : result === "0" ? "D" : "L",
-        color: result === "1" ? "bg-green-500" : result === "0" ? "bg-yellow-500" : "bg-red-500"
+        color: result === "1" ? "bg-score-win-primary" : result === "0" ? "bg-score-draw-primary" : "bg-score-loss-primary",
+        colorText: result === "1" ? "text-score-win-foreground" : result === "0" ? "text-score-draw-foreground" : "text-score-loss-foreground"
       };
     });
   };
@@ -202,11 +203,9 @@ const TeamSummary: React.FC = () => {
             priority
           />
         </div>
-        <h1 className="text-4xl font-bold mb-7 text-center">Royal Rumballers</h1>
+        <h1 className="text-4xl font-extrablack mb-7 text-center">Royal Rumballers</h1>
         <Link href="/players">
-          <Button size="lg" className="bg-primary hover:bg-rose-800 hover:cursor-pointer">
-            View Player Stats
-          </Button>
+          <Button size="lg" className="hover:cursor-pointer">View Player Stats</Button>
         </Link>
       </div>
 
@@ -302,7 +301,7 @@ const TeamSummary: React.FC = () => {
           </CardContent>
           <CardFooter className="flex justify-between">
             <span className="font-medium">Win Percentage:</span>
-            <span className="font-bold text-green-600">
+            <span className="font-bold text-score-win-primary">
               {((parseInt(data.wins) / parseInt(data.gamesPlayed)) * 100).toFixed(1)}%
             </span>
           </CardFooter>
@@ -317,11 +316,13 @@ const TeamSummary: React.FC = () => {
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="font-medium">Win Streak:</span>
-                <span className="font-bold text-green-600">{data.wstreak}</span>
+                <span className="font-bold text-score-win-primary">{data.wstreak}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Unbeaten Streak:</span>
-                <span className="font-bold text-blue-600">{data.unbeatenstreak}</span>
+                <span className={parseInt(data.unbeatenstreak || '0') > 1 ? "text-score-win-primary font-bold proportional-nums" : "text-zinc-500 font-semibold proportional-nums"}>
+                  {data.unbeatenstreak}
+                  </span>
               </div>
               <div className="mt-4">
                 <span className="font-medium block mb-2">Last 5 Matches:</span>
@@ -329,7 +330,7 @@ const TeamSummary: React.FC = () => {
                   {getFormResults().map((result, index) => (
                     <div
                       key={index}
-                      className={`${result.color} w-8 h-8 rounded-full flex items-center justify-center text-white font-bold`}
+                      className={`${result.color} w-8 h-8 rounded-full flex items-center justify-center ${result.colorText} font-bold`}
                     >
                       {result.result}
                     </div>
@@ -351,21 +352,21 @@ const TeamSummary: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="font-medium">Goals Scored:</span>
-                <span className="font-bold text-green-600">{data.goals}</span>
+                <span className="proportional-nums font-extrabold text-score-win-primary">{data.goals}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Goals Against:</span>
-                <span className="text-red-600">{data.goalsAgainst}</span>
+                <span className="proportional-nums font-bold text-score-loss-primary">{data.goalsAgainst}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Goal Difference:</span>
-                <span className={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') > 0 ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
+                <span className={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') > 0 ? "text-score-win-primary font-bold proportional-nums" : "text-score-loss-primary font-semibold proportional-nums"}>
                   {parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0')}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Avg. Goals Per Game:</span>
-                <span>
+                <span className="proportional-nums">
                   {parseInt(data.gamesPlayed) > 0
                     ? (parseInt(data.goals) / parseInt(data.gamesPlayed)).toFixed(2)
                     : '0.00'}
@@ -384,19 +385,19 @@ const TeamSummary: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="font-medium">League Appearances:</span>
-                <span>{data.leagueAppearances}</span>
+                <span className="proportional-nums">{data.leagueAppearances}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Promotions:</span>
-                <span className="text-green-600 font-bold">{data.promotions}</span>
+                <span className="text-score-win-primary font-semibold proportional-nums">{data.promotions}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Relegations:</span>
-                <span className="text-red-600">{data.relegations}</span>
+                <span className="text-score-loss-primary font-semibold proportional-nums">{data.relegations}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Playoff Games:</span>
-                <span>{data.gamesPlayedPlayoff}</span>
+                <span className="proportional-nums">{data.gamesPlayedPlayoff}</span>
               </div>
             </div>
           </CardContent>
