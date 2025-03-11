@@ -321,14 +321,14 @@ const PlayerStatsDashboard: React.FC = () => {
   const chartConfig = {
     value: {
       label: "Value",
-      color: "oklch(0.55 0.22 263)",
+      color: "var(--chart-1)",
     }
   } satisfies ChartConfig
 
   const chartConfigGoals = {
     goals: {
       label: "Goals",
-      color: "oklch(0.55 0.22 263)",
+      color: "var(--chart-1)"
     }
   } satisfies ChartConfig
 
@@ -406,7 +406,7 @@ const PlayerStatsDashboard: React.FC = () => {
                 />
                 <Bar
                   dataKey="value"
-                  fill="oklch(0.55 0.22 263)"
+                  fill="var(--score-win-primary)"
                   radius={4}
                 >
                   <LabelList
@@ -637,7 +637,7 @@ const PlayerStatsDashboard: React.FC = () => {
                     />
                     <Bar
                       dataKey="goals"
-                      fill="oklch(0.55 0.22 263)"
+                      fill="var(--score-win-primary)"
                       radius={4}
                     >
                       <LabelList

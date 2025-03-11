@@ -168,9 +168,9 @@ const TeamSummary: React.FC = () => {
   );
 
   const chartData = [
-    { category: "wins", percentage: parseInt(data.wins || "0"), fill: "oklch(0.65 0.2 240)" },
-    { category: "losses", percentage: parseInt(data.losses || "0"), fill: "oklch(0.35 0.1 240)" },
-    { category: "draws", percentage: parseInt(data.ties || "0"), fill: "oklch(0.5 0.15 240)" },
+    { category: "wins", percentage: parseInt(data.wins || "0"), fill: "var(--color-wins)" },
+    { category: "losses", percentage: parseInt(data.losses || "0"), fill: "var(--color-losses)" },
+    { category: "draws", percentage: parseInt(data.ties || "0"), fill: "var(--color-draws)" },
   ]
   const chartConfig = {
     visitors: {
@@ -178,15 +178,15 @@ const TeamSummary: React.FC = () => {
     },
     wins: {
       label: "Wins",
-      color: "hsl(var(--chart-1))",
+      color: "var(--chart-1)",
     },
     losses: {
       label: "Losses",
-      color: "hsl(var(--chart-2))",
+      color: "var(--chart-2)",
     },
     draws: {
       label: "Draws",
-      color: "hsl(var(--chart-3))",
+      color: "var(--chart-3)",
     },
   } satisfies ChartConfig
 
@@ -204,7 +204,7 @@ const TeamSummary: React.FC = () => {
         </div>
         <h1 className="text-4xl font-bold mb-7 text-center">Royal Rumballers</h1>
         <Link href="/players">
-          <Button size="lg" className="bg-blue-700 hover:bg-blue-800">
+          <Button size="lg" className="bg-primary hover:bg-rose-800 hover:cursor-pointer">
             View Player Stats
           </Button>
         </Link>
