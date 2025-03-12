@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Label, Pie, PieChart } from "recharts";
 import { Button } from '@/components/ui/button';
+import { StatValue } from '@/components/atoms/StatValue';
+import { StatCard } from '@/components/molecules/StatCard';
+import { ChartPie } from '@/components/organisms/charts';
 
 // Royal Rumballers club ID
 const CLUB_ID = 287755;
@@ -168,15 +168,14 @@ const TeamSummary: React.FC = () => {
     </div>
   );
 
+  // Prepare data for pie chart
   const chartData = [
     { category: "wins", percentage: parseInt(data.wins || "0"), fill: "var(--color-wins)" },
     { category: "losses", percentage: parseInt(data.losses || "0"), fill: "var(--color-losses)" },
     { category: "draws", percentage: parseInt(data.ties || "0"), fill: "var(--color-draws)" },
-  ]
+  ];
+  
   const chartConfig = {
-    visitors: {
-      label: "Visitors",
-    },
     wins: {
       label: "Wins",
       color: "var(--chart-1)",
@@ -189,7 +188,7 @@ const TeamSummary: React.FC = () => {
       label: "Draws",
       color: "var(--chart-3)",
     },
-  } satisfies ChartConfig
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -218,194 +217,119 @@ const TeamSummary: React.FC = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Team Overview</CardTitle>
-            <CardDescription>General team statistics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">Skill Rating:</span>
-                <span className="font-bold">{data.skillRating}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Reputation Tier:</span>
-                <span>{data.reputationtier}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Best Division:</span>
-                <span>Division {data.bestDivision}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Best Finish:</span>
-                <span>Group {data.bestFinishGroup}</span>
+        <StatCard title="Team Overview" description="General team statistics">
+          <div className="space-y-2">
+            <StatValue label="Skill Rating" value={data.skillRating} valueClassName="font-bold" />
+            <StatValue label="Reputation Tier" value={data.reputationtier} />
+            <StatValue label="Best Division" value={`Division ${data.bestDivision}`} />
+            <StatValue label="Best Finish" value={`Group ${data.bestFinishGroup}`} />
+          </div>
+        </StatCard>
+
+        <StatCard 
+          title="Match Record" 
+          description="Win/Loss statistics"
+          footer={
+            <div className="flex justify-between w-full">
+              <span className="font-medium">Win Percentage:</span>
+              <span className="font-bold text-score-win-primary">
+                {((parseInt(data.wins) / parseInt(data.gamesPlayed)) * 100).toFixed(1)}%
+              </span>
+            </div>
+          }
+        >
+          <ChartPie 
+            data={chartData} 
+            centerLabel={gamesPlayed.toLocaleString()}
+            centerSubLabel="played"
+            chartConfig={chartConfig}
+          />
+        </StatCard>
+
+        <StatCard title="Current Form" description="Recent performance">
+          <div className="space-y-4">
+            <StatValue 
+              label="Win Streak" 
+              value={data.wstreak} 
+              valueClassName="font-bold text-score-win-primary" 
+            />
+            <StatValue 
+              label="Unbeaten Streak" 
+              value={data.unbeatenstreak}
+              valueClassName={parseInt(data.unbeatenstreak || '0') > 1 ? "text-score-win-primary font-bold proportional-nums" : "text-zinc-500 font-semibold proportional-nums"}
+            />
+            <div className="mt-4">
+              <span className="font-medium block mb-2">Last 5 Matches:</span>
+              <div className="flex space-x-2">
+                {getFormResults().map((result, index) => (
+                  <div
+                    key={index}
+                    className={`${result.color} w-8 h-8 rounded-full flex items-center justify-center ${result.colorText} font-bold`}
+                  >
+                    {result.result}
+                  </div>
+                ))}
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Match Record</CardTitle>
-            <CardDescription>Win/Loss statistics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={chartConfig}
-              className="flex-1 pb-0"
-            >
-              <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Pie
-                  data={chartData}
-                  dataKey="percentage"
-                  nameKey="category"
-                  innerRadius={50}
-                >
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className="fill-foreground text-3xl font-bold"
-                            >
-                              {gamesPlayed.toLocaleString()}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground"
-                            >
-                              played
-                            </tspan>
-                          </text>
-                        )
-                      }
-                    }}
-                  />
-                </Pie>
-              </PieChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <span className="font-medium">Win Percentage:</span>
-            <span className="font-bold text-score-win-primary">
-              {((parseInt(data.wins) / parseInt(data.gamesPlayed)) * 100).toFixed(1)}%
-            </span>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Current Form</CardTitle>
-            <CardDescription>Recent performance</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="font-medium">Win Streak:</span>
-                <span className="font-bold text-score-win-primary">{data.wstreak}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Unbeaten Streak:</span>
-                <span className={parseInt(data.unbeatenstreak || '0') > 1 ? "text-score-win-primary font-bold proportional-nums" : "text-zinc-500 font-semibold proportional-nums"}>
-                  {data.unbeatenstreak}
-                  </span>
-              </div>
-              <div className="mt-4">
-                <span className="font-medium block mb-2">Last 5 Matches:</span>
-                <div className="flex space-x-2">
-                  {getFormResults().map((result, index) => (
-                    <div
-                      key={index}
-                      className={`${result.color} w-8 h-8 rounded-full flex items-center justify-center ${result.colorText} font-bold`}
-                    >
-                      {result.result}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </StatCard>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Goals</CardTitle>
-            <CardDescription>Scoring statistics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">Goals Scored:</span>
-                <span className="proportional-nums font-extrabold text-score-win-primary">{data.goals}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Goals Against:</span>
-                <span className="proportional-nums font-bold text-score-loss-primary">{data.goalsAgainst}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Goal Difference:</span>
-                <span className={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') > 0 ? "text-score-win-primary font-bold proportional-nums" : "text-score-loss-primary font-semibold proportional-nums"}>
-                  {parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0')}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Avg. Goals Per Game:</span>
-                <span className="proportional-nums">
-                  {parseInt(data.gamesPlayed) > 0
-                    ? (parseInt(data.goals) / parseInt(data.gamesPlayed)).toFixed(2)
-                    : '0.00'}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard title="Goals" description="Scoring statistics">
+          <div className="space-y-2">
+            <StatValue 
+              label="Goals Scored" 
+              value={data.goals} 
+              valueClassName="proportional-nums font-extrabold text-score-win-primary"
+            />
+            <StatValue 
+              label="Goals Against" 
+              value={data.goalsAgainst} 
+              valueClassName="proportional-nums font-bold text-score-loss-primary"
+            />
+            <StatValue 
+              label="Goal Difference" 
+              value={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0')}
+              valueClassName={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') > 0 ? "text-score-win-primary font-bold proportional-nums" : "text-score-loss-primary font-semibold proportional-nums"}
+            />
+            <StatValue 
+              label="Avg. Goals Per Game" 
+              value={parseInt(data.gamesPlayed) > 0
+                ? (parseInt(data.goals) / parseInt(data.gamesPlayed)).toFixed(2)
+                : '0.00'}
+              valueClassName="proportional-nums"
+            />
+          </div>
+        </StatCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>League Performance</CardTitle>
-            <CardDescription>Promotion and relegation history</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">League Appearances:</span>
-                <span className="proportional-nums">{data.leagueAppearances}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Promotions:</span>
-                <span className="text-score-win-primary font-semibold proportional-nums">{data.promotions}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Relegations:</span>
-                <span className="text-score-loss-primary font-semibold proportional-nums">{data.relegations}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Playoff Games:</span>
-                <span className="proportional-nums">{data.gamesPlayedPlayoff}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard title="League Performance" description="Promotion and relegation history">
+          <div className="space-y-2">
+            <StatValue 
+              label="League Appearances" 
+              value={data.leagueAppearances}
+              valueClassName="proportional-nums"
+            />
+            <StatValue 
+              label="Promotions" 
+              value={data.promotions}
+              valueClassName="text-score-win-primary font-semibold proportional-nums"
+            />
+            <StatValue 
+              label="Relegations" 
+              value={data.relegations}
+              valueClassName="text-score-loss-primary font-semibold proportional-nums"
+            />
+            <StatValue 
+              label="Playoff Games" 
+              value={data.gamesPlayedPlayoff}
+              valueClassName="proportional-nums"
+            />
+          </div>
+        </StatCard>
       </div>
     </div>
   );
 };
 
 export default TeamSummary;
-
