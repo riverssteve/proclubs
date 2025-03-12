@@ -1,12 +1,11 @@
-// src/components/PlayerStatsDashboard.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { StatCard } from '@/components/molecules/StatCard';
+import { StatValue } from '@/components/atoms/StatValue';
+import { ChartBar } from '@/components/organisms/charts';
 
 // Royal Rumballers club ID
 const CLUB_ID = 287755;
@@ -323,15 +322,14 @@ const PlayerStatsDashboard: React.FC = () => {
       label: "Value",
       color: "var(--chart-1)",
     }
-  } satisfies ChartConfig
+  };
 
   const chartConfigGoals = {
     goals: {
       label: "Goals",
       color: "var(--chart-1)"
     }
-  } satisfies ChartConfig
-
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -349,104 +347,55 @@ const PlayerStatsDashboard: React.FC = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card className="col-span-1 md:col-span-3">
-          <CardHeader>
-            <CardTitle>Players Comparison</CardTitle>
-            <CardDescription>Compare players across different statistics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-8">
-              <label className="block mb-2 font-medium">Select Stat to Compare:</label>
-              <Select
-                value={comparisonStat}
-                onValueChange={(value) => setComparisonStat(value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a stat to compare" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Statistics</SelectLabel>
-                    {statOptions.map(option => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+        <StatCard 
+          title="Players Comparison" 
+          description="Compare players across different statistics"
+          className="col-span-1 md:col-span-3"
+        >
+          <div className="mb-8">
+            <label className="block mb-2 font-medium">Select Stat to Compare:</label>
+            <Select
+              value={comparisonStat}
+              onValueChange={(value) => setComparisonStat(value)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a stat to compare" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Statistics</SelectLabel>
+                  {statOptions.map(option => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
 
-            <ChartContainer config={chartConfig}>
-              <BarChart
-                accessibilityLayer
-                data={getComparisonData()}
-                layout="vertical"
-                margin={{
-                  left: 60,
-                  right: 30
-                }}
-              >
-                <XAxis
-                  type="number"
-                  dataKey="value"
-                  domain={[0, 'dataMax']}
-                  tickCount={5}
-                  interval={0}
-                  hide
-                />
-                <YAxis
-                  dataKey="name"
-                  type="category"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  interval={0}
-                  includeHidden
-                />
-                <Bar
-                  dataKey="value"
-                  fill="var(--chart-1)"
-                  radius={4}
-                >
-                  <LabelList
-                    dataKey="value"
-                    position="right"
-                    offset={8}
-                    className="fill-foreground"
-                    fontSize={12}
-                    formatter={(value: number) => {
-                      if (value <= 0) return '';
-                      // Check if value has decimal part
-                      return value % 1 !== 0 ? value.toFixed(1) : value;
-                    }}
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+          <ChartBar 
+            data={getComparisonData()} 
+            layout="vertical" 
+            margin={{ left: 60, right: 30 }}
+            chartConfig={chartConfig}
+          />
+        </StatCard>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Position Distribution</CardTitle>
-            <CardDescription>Player positions in team</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 p-6">
-              {Object.entries(data.positionCount).map(([position, count]) => (
-                <div key={position} className="flex items-center">
-                  <div
-                    className="w-4 h-4 rounded-full mr-2"
-                    style={{ backgroundColor: positionColors[position] }}
-                  ></div>
-                  <span className="capitalize">{position}:</span>
-                  <span className="ml-auto font-bold">{count}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard title="Position Distribution" description="Player positions in team">
+          <div className="space-y-2 p-6">
+            {Object.entries(data.positionCount).map(([position, count]) => (
+              <div key={position} className="flex items-center">
+                <div
+                  className="w-4 h-4 rounded-full mr-2"
+                  style={{ backgroundColor: positionColors[position] }}
+                ></div>
+                <span className="capitalize">{position}:</span>
+                <span className="ml-auto font-bold">{count}</span>
+              </div>
+            ))}
+          </div>
+        </StatCard>
       </div>
 
       <div className="mb-8">
@@ -475,197 +424,104 @@ const PlayerStatsDashboard: React.FC = () => {
       </div>
 
       {selectedPlayer && (
-        <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid grid-cols-3 mb-6">
-            <TabsTrigger value="profile">Player Profile</TabsTrigger>
-            <TabsTrigger value="stats">Stats</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="profile" className="w-full ">
+          <div className="flex justify-center">
+            <TabsList className="grid grid-cols-3 mb-6 md:w-150 centre">
+              <TabsTrigger value="profile">Player Profile</TabsTrigger>
+              <TabsTrigger value="stats">Stats</TabsTrigger>
+              <TabsTrigger value="history">History</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="profile" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Player Profile</CardTitle>
-                <CardDescription>{selectedPlayer.name} ({selectedPlayer.proName || 'Unknown'})</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="font-medium">Position:</span>
-                      <span className="capitalize">{selectedPlayer.favoritePosition}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Height:</span>
-                      <span>{selectedPlayer.proHeight || 'N/A'} cm</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Nationality:</span>
-                      <span>ID: {selectedPlayer.proNationality || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Overall Rating:</span>
-                      <span className="font-bold">{selectedPlayer.proOverall || 'N/A'}/100</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Style:</span>
-                      <span>ID: {selectedPlayer.proStyle || 'N/A'}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="font-medium">Games Played:</span>
-                      <span>{selectedPlayer.gamesPlayed || '0'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Win Rate:</span>
-                      <span>{selectedPlayer.winRate || '0'}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Man of the Match:</span>
-                      <span>{selectedPlayer.manOfTheMatch || '0'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Red Cards:</span>
-                      <span>{selectedPlayer.redCards || '0'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Average Rating:</span>
-                      <span>{selectedPlayer.ratingAve || 'N/A'}/10</span>
-                    </div>
-                  </div>
+            <StatCard 
+              title="Player Profile" 
+              description={`${selectedPlayer.name} (${selectedPlayer.proName || 'Unknown'})`}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <StatValue label="Position" value={<span className="capitalize">{selectedPlayer.favoritePosition}</span>} />
+                  <StatValue label="Height" value={`${selectedPlayer.proHeight || 'N/A'} cm`} />
+                  <StatValue label="Nationality" value={`ID: ${selectedPlayer.proNationality || 'N/A'}`} />
+                  <StatValue label="Overall Rating" value={`${selectedPlayer.proOverall || 'N/A'}/100`} valueClassName="font-bold" />
+                  <StatValue label="Style" value={`ID: ${selectedPlayer.proStyle || 'N/A'}`} />
                 </div>
-              </CardContent>
-            </Card>
+
+                <div className="space-y-2">
+                  <StatValue label="Games Played" value={selectedPlayer.gamesPlayed || '0'} />
+                  <StatValue label="Win Rate" value={`${selectedPlayer.winRate || '0'}%`} />
+                  <StatValue label="Man of the Match" value={selectedPlayer.manOfTheMatch || '0'} />
+                  <StatValue label="Red Cards" value={selectedPlayer.redCards || '0'} />
+                  <StatValue label="Average Rating" value={`${selectedPlayer.ratingAve || 'N/A'}/10`} />
+                </div>
+              </div>
+            </StatCard>
           </TabsContent>
 
           <TabsContent value="stats" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Performance Statistics</CardTitle>
-                <CardDescription>Detailed stats for {selectedPlayer.name}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold mb-2 text-green-800 dark:text-green-200">Offensive Stats</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Goals:</span>
-                        <span className="font-bold">{selectedPlayer.goals || '0'}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Assists:</span>
-                        <span className="font-bold">{selectedPlayer.assists || '0'}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Shot Success:</span>
-                        <span className="font-bold">{selectedPlayer.shotSuccessRate || '0'}%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-200">Passing Stats</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Passes Made:</span>
-                        <span className="font-bold">{selectedPlayer.passesMade || '0'}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Pass Success:</span>
-                        <span className="font-bold">{selectedPlayer.passSuccessRate || '0'}%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold mb-2 text-red-800 dark:text-red-200">Defensive Stats</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Tackles Made:</span>
-                        <span className="font-bold">{selectedPlayer.tacklesMade || '0'}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Tackle Success:</span>
-                        <span className="font-bold">{selectedPlayer.tackleSuccessRate || '0'}%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Clean Sheets:</span>
-                        <span className="font-bold">
-                          {selectedPlayer.favoritePosition === 'goalkeeper'
-                            ? (selectedPlayer.cleanSheetsGK || '0')
-                            : (selectedPlayer.cleanSheetsDef || '0')}
-                        </span>
-                      </div>
-                    </div>
+            <StatCard 
+              title="Performance Statistics" 
+              description={`Detailed stats for ${selectedPlayer.name}`}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
+                  <h3 className="text-lg font-bold mb-2 text-green-800 dark:text-green-200">Offensive Stats</h3>
+                  <div className="space-y-2">
+                    <StatValue label="Goals" value={selectedPlayer.goals || '0'} valueClassName="font-bold" />
+                    <StatValue label="Assists" value={selectedPlayer.assists || '0'} valueClassName="font-bold" />
+                    <StatValue label="Shot Success" value={`${selectedPlayer.shotSuccessRate || '0'}%`} valueClassName="font-bold" />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+
+                <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
+                  <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-200">Passing Stats</h3>
+                  <div className="space-y-2">
+                    <StatValue label="Passes Made" value={selectedPlayer.passesMade || '0'} valueClassName="font-bold" />
+                    <StatValue label="Pass Success" value={`${selectedPlayer.passSuccessRate || '0'}%`} valueClassName="font-bold" />
+                  </div>
+                </div>
+
+                <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg">
+                  <h3 className="text-lg font-bold mb-2 text-red-800 dark:text-red-200">Defensive Stats</h3>
+                  <div className="space-y-2">
+                    <StatValue label="Tackles Made" value={selectedPlayer.tacklesMade || '0'} valueClassName="font-bold" />
+                    <StatValue label="Tackle Success" value={`${selectedPlayer.tackleSuccessRate || '0'}%`} valueClassName="font-bold" />
+                    <StatValue 
+                      label="Clean Sheets" 
+                      value={selectedPlayer.favoritePosition === 'goalkeeper'
+                        ? (selectedPlayer.cleanSheetsGK || '0')
+                        : (selectedPlayer.cleanSheetsDef || '0')} 
+                      valueClassName="font-bold" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </StatCard>
           </TabsContent>
 
           <TabsContent value="history" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Goal History</CardTitle>
-                <CardDescription>Last 10 matches goal performance</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfigGoals}>
-                  <BarChart
-                    accessibilityLayer
-                    data={getRecentGoalsData()}
-                    layout="vertical"
-                    margin={{
-                      left: 20,
-                      right: 20
-                    }}
-                  >
-                    <XAxis
-                      interval={0}
-                      hide
-                    />
-                    <YAxis
-                      dataKey="match"
-                      type="category"
-                      tickLine={false}
-                      tickMargin={10}
-                      interval={0}
-                      axisLine={false}
-                    />
-                    <Bar
-                      dataKey="goals"
-                      fill="var(--chart-1)"
-                      radius={4}
-                    >
-                      <LabelList
-                        dataKey="goals"
-                        position="right"
-                        offset={8}
-                        className="fill-foreground"
-                        fontSize={12}
-                        formatter={(value: number) => {
-                          if (value <= 0) return '';
-                          // Check if value has decimal part
-                          return value % 1 !== 0 ? value.toFixed(1) : value;
-                        }}
-                      />
-                    </Bar>
-                  </BarChart>
-                </ChartContainer>
-                <div className="mt-4">
-                  <p className="font-medium">Total goals in last 10 matches: {
-                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reduce((sum, i) => {
-                      const key = `prevGoals${i}` as keyof PlayerStats;
-                      const value = parseFloat(selectedPlayer[key] as string) || 0;
-                      return sum + value;
-                    }, 0).toFixed(1).replace(/\.0$/, '')
-                  }</p>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard 
+              title="Recent Goal History" 
+              description="Last 10 matches goal performance"
+            >
+              <ChartBar 
+                data={getRecentGoalsData()} 
+                dataKey="goals"
+                layout="vertical" 
+                margin={{ left: 20, right: 20 }}
+                chartConfig={chartConfigGoals}
+              />
+              
+              <div className="mt-4">
+                <p className="font-medium">Total goals in last 10 matches: {
+                  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reduce((sum, i) => {
+                    const key = `prevGoals${i}` as keyof PlayerStats;
+                    const value = parseFloat(selectedPlayer[key] as string) || 0;
+                    return sum + value;
+                  }, 0).toFixed(1).replace(/\.0$/, '')
+                }</p>
+              </div>
+            </StatCard>
           </TabsContent>
         </Tabs>
       )}
