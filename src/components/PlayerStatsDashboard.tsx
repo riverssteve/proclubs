@@ -440,19 +440,19 @@ const PlayerStatsDashboard: React.FC = () => {
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <StatValue label="Position" value={<span className="capitalize">{selectedPlayer.favoritePosition}</span>} />
-                  <StatValue label="Height" value={`${selectedPlayer.proHeight || 'N/A'} cm`} />
-                  <StatValue label="Nationality" value={`ID: ${selectedPlayer.proNationality || 'N/A'}`} />
-                  <StatValue label="Overall Rating" value={`${selectedPlayer.proOverall || 'N/A'}/100`} valueClassName="font-bold" />
-                  <StatValue label="Style" value={`ID: ${selectedPlayer.proStyle || 'N/A'}`} />
+                  <StatRow label="Position" value={selectedPlayer.favoritePosition} capitalize/>
+                  <StatRow label="Height" value={`${selectedPlayer.proHeight || 'N/A'} cm`} />
+                  <StatRow label="Nationality" value={`ID: ${selectedPlayer.proNationality || 'N/A'}`} />
+                  <StatRow label="Overall Rating" value={`${selectedPlayer.proOverall || 'N/A'}/100`} emphasis />
+                  <StatRow label="Style" value={`ID: ${selectedPlayer.proStyle || 'N/A'}`} />
                 </div>
 
                 <div className="space-y-2">
-                  <StatValue label="Games Played" value={selectedPlayer.gamesPlayed || '0'} />
-                  <StatValue label="Win Rate" value={`${selectedPlayer.winRate || '0'}%`} />
-                  <StatValue label="Man of the Match" value={selectedPlayer.manOfTheMatch || '0'} />
-                  <StatValue label="Red Cards" value={selectedPlayer.redCards || '0'} />
-                  <StatValue label="Average Rating" value={`${selectedPlayer.ratingAve || 'N/A'}/10`} />
+                  <StatRow label="Games Played" value={selectedPlayer.gamesPlayed || '0'} />
+                  <StatRow label="Win Rate" value={`${selectedPlayer.winRate || '0'}%`} />
+                  <StatRow label="Man of the Match" value={selectedPlayer.manOfTheMatch || '0'} />
+                  <StatRow label="Red Cards" value={selectedPlayer.redCards || '0'} />
+                  <StatRow label="Average Rating" value={`${selectedPlayer.ratingAve || 'N/A'}/10`} emphasis />
                 </div>
               </div>
             </StatCard>
@@ -467,31 +467,31 @@ const PlayerStatsDashboard: React.FC = () => {
                 <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
                   <h3 className="text-lg font-bold mb-2 text-green-800 dark:text-green-200">Offensive Stats</h3>
                   <div className="space-y-2">
-                    <StatValue label="Goals" value={selectedPlayer.goals || '0'} valueClassName="font-bold" />
-                    <StatValue label="Assists" value={selectedPlayer.assists || '0'} valueClassName="font-bold" />
-                    <StatValue label="Shot Success" value={`${selectedPlayer.shotSuccessRate || '0'}%`} valueClassName="font-bold" />
+                    <StatRow label="Goals" value={selectedPlayer.goals || '0'} emphasis />
+                    <StatRow label="Assists" value={selectedPlayer.assists || '0'} emphasis />
+                    <StatRow label="Shot Success" value={`${selectedPlayer.shotSuccessRate || '0'}%`} emphasis />
                   </div>
                 </div>
 
                 <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
                   <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-200">Passing Stats</h3>
                   <div className="space-y-2">
-                    <StatValue label="Passes Made" value={selectedPlayer.passesMade || '0'} valueClassName="font-bold" />
-                    <StatValue label="Pass Success" value={`${selectedPlayer.passSuccessRate || '0'}%`} valueClassName="font-bold" />
+                    <StatRow label="Passes Made" value={selectedPlayer.passesMade || '0'} emphasis />
+                    <StatRow label="Pass Success" value={`${selectedPlayer.passSuccessRate || '0'}%`} emphasis />
                   </div>
                 </div>
 
                 <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg">
                   <h3 className="text-lg font-bold mb-2 text-red-800 dark:text-red-200">Defensive Stats</h3>
                   <div className="space-y-2">
-                    <StatValue label="Tackles Made" value={selectedPlayer.tacklesMade || '0'} valueClassName="font-bold" />
-                    <StatValue label="Tackle Success" value={`${selectedPlayer.tackleSuccessRate || '0'}%`} valueClassName="font-bold" />
-                    <StatValue 
+                    <StatRow label="Tackles Made" value={selectedPlayer.tacklesMade || '0'} emphasis />
+                    <StatRow label="Tackle Success" value={`${selectedPlayer.tackleSuccessRate || '0'}%`} emphasis />
+                    <StatRow 
                       label="Clean Sheets" 
                       value={selectedPlayer.favoritePosition === 'goalkeeper'
                         ? (selectedPlayer.cleanSheetsGK || '0')
                         : (selectedPlayer.cleanSheetsDef || '0')} 
-                      valueClassName="font-bold" 
+                      emphasis
                     />
                   </div>
                 </div>
