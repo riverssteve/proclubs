@@ -21,14 +21,23 @@ export async function GET(request: NextRequest) {
     }
 
     const path = `${API_BASE_URL}/overallStats?platform=${platform}&clubIds=${clubId}`
-    const response = await fetch(path);
+
+    const headers = {
+      'Accept': 'application/json',
+    };
+
+    const response = await fetch(path, { headers });
 
     if (!response.ok) {
-      throw new Error(`EA API responded with status: ${response.status}`);
+      throw new Error(`EA API returned ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: {
+        'Cache-Control': 'max-age=300', // Cache for 5 minutes
+      }
+    });
   } catch (error) {
     console.error('Error fetching club data:', error);
     return NextResponse.json(
