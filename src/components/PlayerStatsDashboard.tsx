@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatCard } from '@/components/molecules/StatCard';
-import { StatValue } from '@/components/atoms/StatValue';
+import { StatValue, StatRow } from '@/components/atoms/StatValue';
 import { ChartBar } from '@/components/organisms/charts';
 
 // Royal Rumballers club ID
@@ -34,17 +34,6 @@ interface PlayerStats {
   proOverallStr: string;
   manOfTheMatch: string;
   redCards: string;
-  prevGoals: string;
-  prevGoals1: string;
-  prevGoals2: string;
-  prevGoals3: string;
-  prevGoals4: string;
-  prevGoals5: string;
-  prevGoals6: string;
-  prevGoals7: string;
-  prevGoals8: string;
-  prevGoals9: string;
-  prevGoals10: string;
   favoritePosition: string;
 }
 
@@ -64,11 +53,6 @@ interface ComparisonDataPoint {
   name: string;
   value: number;
   position: string;
-}
-
-interface GoalHistoryDataPoint {
-  match: string;
-  goals: number;
 }
 
 interface StatOption {
@@ -103,17 +87,6 @@ const getMockData = (): TeamData => {
         "proOverallStr": "88",
         "manOfTheMatch": "0",
         "redCards": "5",
-        "prevGoals": "0",
-        "prevGoals1": "0",
-        "prevGoals2": "1",
-        "prevGoals3": "0",
-        "prevGoals4": "1",
-        "prevGoals5": "0",
-        "prevGoals6": "1",
-        "prevGoals7": "2",
-        "prevGoals8": "0",
-        "prevGoals9": "1",
-        "prevGoals10": "0",
         "favoritePosition": "forward"
       },
       {
@@ -139,17 +112,6 @@ const getMockData = (): TeamData => {
         "proOverallStr": "92",
         "manOfTheMatch": "6",
         "redCards": "2",
-        "prevGoals": "2",
-        "prevGoals1": "3",
-        "prevGoals2": "2",
-        "prevGoals3": "4",
-        "prevGoals4": "3",
-        "prevGoals5": "1",
-        "prevGoals6": "2",
-        "prevGoals7": "5",
-        "prevGoals8": "2",
-        "prevGoals9": "4",
-        "prevGoals10": "4",
         "favoritePosition": "forward"
       }
     ],
@@ -266,18 +228,6 @@ const PlayerStatsDashboard: React.FC = () => {
     })).sort((a, b) => b.value - a.value);
   };
 
-  const getRecentGoalsData = (): GoalHistoryDataPoint[] => {
-    if (!selectedPlayer) return [];
-
-    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => {
-      const key = `prevGoals${i}` as keyof PlayerStats;
-      return {
-        match: `Match ${i}`,
-        goals: parseFloat(selectedPlayer[key] as string) || 0
-      };
-    }).reverse();
-  };
-
   const positionColors: Record<string, string> = {
     forward: "#1e40af",
     midfielder: "#2563eb",
@@ -321,13 +271,6 @@ const PlayerStatsDashboard: React.FC = () => {
     value: {
       label: "Value",
       color: "var(--chart-1)",
-    }
-  };
-
-  const chartConfigGoals = {
-    goals: {
-      label: "Goals",
-      color: "var(--chart-1)"
     }
   };
 
@@ -501,26 +444,12 @@ const PlayerStatsDashboard: React.FC = () => {
 
           <TabsContent value="history" className="space-y-4">
             <StatCard 
-              title="Recent Goal History" 
+              title="Player Stat History"
               description="Last 10 matches goal performance"
             >
-              <ChartBar 
-                data={getRecentGoalsData()} 
-                dataKey="goals"
-                layout="vertical" 
-                margin={{ left: 20, right: 20 }}
-                chartConfig={chartConfigGoals}
-              />
-              
-              <div className="mt-4">
-                <p className="font-medium">Total goals in last 10 matches: {
-                  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reduce((sum, i) => {
-                    const key = `prevGoals${i}` as keyof PlayerStats;
-                    const value = parseFloat(selectedPlayer[key] as string) || 0;
-                    return sum + value;
-                  }, 0).toFixed(1).replace(/\.0$/, '')
-                }</p>
-              </div>
+              <span>
+                Removed because I can&apos;t work out what the data represents.
+              </span>
             </StatCard>
           </TabsContent>
         </Tabs>
