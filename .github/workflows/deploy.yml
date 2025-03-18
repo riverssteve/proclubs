@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    name: Lint, Format, and Build
+    name: Deploy to Cloudflare Workers
     runs-on: ubuntu-latest
 
     steps:
