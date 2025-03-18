@@ -42,6 +42,6 @@
     "prettier": "3.5.3",
     "typescript": "^5",
     "vercel": "^41.3.2",
-    "wrangler": "^3.114.0"
+    "wrangler": "^4.1.0"
   }
 }
