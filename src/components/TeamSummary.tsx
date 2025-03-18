@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { StatValue } from '@/components/atoms/StatValue';
+import { StatRow } from '@/components/atoms/StatValue';
 import { StatCard } from '@/components/molecules/StatCard';
 import { ChartPie } from '@/components/organisms/charts';
 
@@ -219,10 +219,10 @@ const TeamSummary: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <StatCard title="Team Overview" description="General team statistics">
           <div className="space-y-2">
-            <StatValue label="Skill Rating" value={data.skillRating} valueClassName="font-bold" />
-            <StatValue label="Reputation Tier" value={data.reputationtier} />
-            <StatValue label="Best Division" value={`Division ${data.bestDivision}`} />
-            <StatValue label="Best Finish" value={`Group ${data.bestFinishGroup}`} />
+            <StatRow label="Skill Rating" value={data.skillRating} emphasis/>
+            <StatRow label="Reputation Tier" value={data.reputationtier} />
+            <StatRow label="Best Division" value={`Division ${data.bestDivision}`} />
+            <StatRow label="Best Finish" value={`Group ${data.bestFinishGroup}`} />
           </div>
         </StatCard>
 
@@ -248,15 +248,13 @@ const TeamSummary: React.FC = () => {
 
         <StatCard title="Current Form" description="Recent performance">
           <div className="space-y-4">
-            <StatValue 
+            <StatRow 
               label="Win Streak" 
               value={data.wstreak} 
-              valueClassName="font-bold text-score-win-primary" 
             />
-            <StatValue 
+            <StatRow 
               label="Unbeaten Streak" 
               value={data.unbeatenstreak}
-              valueClassName={parseInt(data.unbeatenstreak || '0') > 1 ? "text-score-win-primary font-bold proportional-nums" : "text-zinc-500 font-semibold proportional-nums"}
             />
             <div className="mt-4">
               <span className="font-medium block mb-2">Last 5 Matches:</span>
@@ -278,53 +276,30 @@ const TeamSummary: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StatCard title="Goals" description="Scoring statistics">
           <div className="space-y-2">
-            <StatValue 
-              label="Goals Scored" 
-              value={data.goals} 
-              valueClassName="proportional-nums font-extrabold text-score-win-primary"
-            />
-            <StatValue 
-              label="Goals Against" 
-              value={data.goalsAgainst} 
-              valueClassName="proportional-nums font-bold text-score-loss-primary"
-            />
-            <StatValue 
+            <StatRow label="Goals Scored" value={data.goals} win emphasis/>
+            <StatRow label="Goals Against" value={data.goalsAgainst} loss emphasis/>
+            <StatRow 
               label="Goal Difference" 
               value={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0')}
-              valueClassName={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') > 0 ? "text-score-win-primary font-bold proportional-nums" : "text-score-loss-primary font-semibold proportional-nums"}
+              win={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') > 0}
+              loss={parseInt(data.goals || '0') - parseInt(data.goalsAgainst || '0') < 0}
+              emphasis
             />
-            <StatValue 
+            <StatRow 
               label="Avg. Goals Per Game" 
               value={parseInt(data.gamesPlayed) > 0
                 ? (parseInt(data.goals) / parseInt(data.gamesPlayed)).toFixed(2)
                 : '0.00'}
-              valueClassName="proportional-nums"
             />
           </div>
         </StatCard>
 
         <StatCard title="League Performance" description="Promotion and relegation history">
           <div className="space-y-2">
-            <StatValue 
-              label="League Appearances" 
-              value={data.leagueAppearances}
-              valueClassName="proportional-nums"
-            />
-            <StatValue 
-              label="Promotions" 
-              value={data.promotions}
-              valueClassName="text-score-win-primary font-semibold proportional-nums"
-            />
-            <StatValue 
-              label="Relegations" 
-              value={data.relegations}
-              valueClassName="text-score-loss-primary font-semibold proportional-nums"
-            />
-            <StatValue 
-              label="Playoff Games" 
-              value={data.gamesPlayedPlayoff}
-              valueClassName="proportional-nums"
-            />
+            <StatRow label="League Appearances" value={data.leagueAppearances} />
+            <StatRow label="Promotions" value={data.promotions} win emphasis/>
+            <StatRow label="Relegations" value={data.relegations} loss emphasis/>
+            <StatRow label="Playoff Games" value={data.gamesPlayedPlayoff} />
           </div>
         </StatCard>
       </div>
