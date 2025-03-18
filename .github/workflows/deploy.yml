@@ -1,0 +1,13 @@
+on:
+  push:
+    branches:
+    - main
+    
+jobs:
+  deploy:
+    name: Lint, Format, and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Cloudflare Workers with Wrangler
+        uses: cloudflare/wrangler-action@v3.14.1
