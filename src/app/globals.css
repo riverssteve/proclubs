@@ -15,7 +15,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -102,7 +101,7 @@ body {
   --score-draw-primary: oklch(0.72 0.01 56);
   --score-loss-primary: oklch(0.59 0.22 18);
   --score-win-foreground: oklch(0.96 0.04 157);
-  --score-draw-foreground: oklch(0.97 0.00 286);
+  --score-draw-foreground: oklch(0.97 0 286);
   --score-loss-foreground: oklch(0.94 0.03 18);
 }
 
@@ -152,7 +151,7 @@ body {
 }
 
 @theme {
-  --font-weight-extrablack: 1000; 
+  --font-weight-extrablack: 1000;
 }
 
 @layer base {

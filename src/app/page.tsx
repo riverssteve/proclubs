@@ -1,5 +1,5 @@
-import React from 'react';
-import TeamSummary from '@/components/TeamSummary';
+import React from "react";
+import TeamSummary from "@/components/TeamSummary";
 
 export default function Home(): React.ReactNode {
   return (

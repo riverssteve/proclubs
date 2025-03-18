@@ -1,6 +1,11 @@
-import React from 'react';
+import React from "react";
 import { Label, Pie, PieChart } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 interface ChartPieDataPoint {
   category: string;
@@ -23,15 +28,15 @@ export const ChartPie: React.FC<ChartPieProps> = ({
   data,
   centerLabel,
   centerSubLabel,
-  dataKey = 'percentage',
-  categoryKey = 'category',
+  dataKey = "percentage",
+  categoryKey = "category",
   innerRadius = 50,
   outerRadius = 80,
   chartConfig = {
     value: {
       label: "Value",
       color: "var(--chart-1)",
-    }
+    },
   },
 }) => {
   return (

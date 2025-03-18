@@ -18,19 +18,19 @@ export const StatRow: React.FC<StatRowProps> = ({
   loss = false,
 }) => {
   const valueClasses = [
-    'tabular-nums',
-    emphasis && 'font-bold',
-    capitalize && 'capitalize',
-    win && 'text-score-win-primary',
-    loss && !win && 'text-score-loss-primary'
-  ].filter(Boolean).join(' ');
+    "tabular-nums",
+    emphasis && "font-bold",
+    capitalize && "capitalize",
+    win && "text-score-win-primary",
+    loss && !win && "text-score-loss-primary",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="flex justify-between">
       <span className="font-medium">{label}:</span>
-      <span className={valueClasses}> 
-        {value}
-      </span>
+      <span className={valueClasses}>{value}</span>
     </div>
   );
 };
