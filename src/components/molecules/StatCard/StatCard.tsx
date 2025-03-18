@@ -1,5 +1,12 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface StatCardProps {
   title: string;
@@ -14,7 +21,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   description,
   children,
   footer,
-  className = '',
+  className = "",
 }) => {
   return (
     <Card className={className}>
@@ -22,9 +29,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      <CardContent>
-        {children}
-      </CardContent>
+      <CardContent>{children}</CardContent>
       {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   );
