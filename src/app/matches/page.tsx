@@ -1,8 +1,8 @@
 import React from "react";
-import PlayerStatsDashboard from "@/components/pages/PlayerStatsDashboard";
 import Link from "next/link";
+import { MatchTrackerPage } from "@/components/pages/MatchTrackerPage";
 
-export default function PlayersPage(): React.ReactNode {
+export default function MatchTracker(): React.ReactNode {
   return (
     <main className="min-h-screen white">
       <div className="container mx-auto px-4 py-4">
@@ -13,7 +13,7 @@ export default function PlayersPage(): React.ReactNode {
           ← Back to Team Summary
         </Link>
       </div>
-      <PlayerStatsDashboard />
+      <MatchTrackerPage />
     </main>
   );
 }
