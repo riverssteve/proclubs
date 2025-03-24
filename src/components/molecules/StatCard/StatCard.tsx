@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/card";
 
 interface StatCardProps {
-  title: string;
+  title: React.ReactNode;
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -22,6 +23,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   children,
   footer,
   className = "",
+  onClick,
 }) => {
   return (
     <Card className={className}>
@@ -29,7 +31,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent onClick={onClick}>{children}</CardContent>
       {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   );

@@ -234,11 +234,18 @@ const TeamSummary: React.FC = () => {
         <h1 className="text-4xl font-extrablack mb-7 text-center">
           Royal Rumballers
         </h1>
-        <Link href="/players">
-          <Button size="lg" className="hover:cursor-pointer">
-            View Player Stats
-          </Button>
-        </Link>
+        <div className="flex space-x-4 justify-center">
+          <Link href="/players">
+            <Button size="lg" className="hover:cursor-pointer">
+              View Player Stats
+            </Button>
+          </Link>
+          <Link href="/matches">
+            <Button size="lg" className="hover:cursor-pointer">
+              View Match History
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {error && (
