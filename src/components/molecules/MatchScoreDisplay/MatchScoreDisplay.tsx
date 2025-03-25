@@ -10,18 +10,7 @@ interface MatchScoreDisplayProps {
 export const MatchScoreDisplay: React.FC<MatchScoreDisplayProps> = ({ 
   matchData, size = 'md'
 }) => {
-  const sizeClasses = {
-    sm: "text-lg",
-    md: "text-xl md:text-2xl",
-    lg: "text-2xl md:text-3xl"
-  };
-  
-  const maxWidthClasses = {
-    sm: "max-w-[80px] md:max-w-[120px]",
-    md: "max-w-[100px] md:max-w-[150px]",
-    lg: "max-w-[120px] md:max-w-[180px]"
-  };
-
+  console.log(`size: ${size}`);
   return (
     <div className={`grid grid-cols-3 items-center py-4`}>
       <div className="flex flex-col items-center">

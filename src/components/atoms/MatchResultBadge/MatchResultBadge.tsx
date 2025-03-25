@@ -7,8 +7,6 @@ interface MatchResultBadgeProps {
 
 export const MatchResultBadge: React.FC<MatchResultBadgeProps> = ({ result }) => {
   let text: string, bgColor: string, textColor: string;
-  
-  console.log(`MatchResultBadge: result=${result}`);
   if (result === MatchResult.win ) {
     text = "WIN";
     bgColor = "bg-score-win-primary";
