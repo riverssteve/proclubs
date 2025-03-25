@@ -5,7 +5,7 @@ import { MatchResultBadge } from '@/components/atoms/MatchResultBadge';
 import { TimeStamp } from '@/components/atoms/TimeStamp';
 import { MatchScoreDisplay } from '@/components/molecules/MatchScoreDisplay';
 import { TopPerformerCard } from '@/components/molecules/TopPerformerCard/TopPerformerCard';
-import { Match, TopPerformer } from '@/types/match';
+import { Match, MatchDisplay, TopPerformer } from '@/types/match';
 
 interface MatchCardProps {
   match: Match;
@@ -19,6 +19,17 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, clubId, topPerforme
   const ourClub = match.clubs[clubIdStr];
   const opponentClubId = Object.keys(match.clubs).find(id => id !== clubIdStr);
   const opponentClub = opponentClubId ? match.clubs[opponentClubId] : null;
+
+  const matchData: MatchDisplay = {
+    homeTeam: {
+      name: ourClub.details.name,
+      score: ourClub.goals
+    },
+    awayTeam: {
+      name: opponentClub?.details.name || '',
+      score: opponentClub?.goals || ''
+    }
+  };
   
   if (!ourClub || !opponentClub) return null;
 
@@ -35,13 +46,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, clubId, topPerforme
       className="cursor-pointer hover:shadow-md transition-shadow"
     >
       <div className="space-y-4">
-        <MatchScoreDisplay 
-          homeTeam={ourClub.details.name}
-          awayTeam={opponentClub.details.name}
-          homeScore={ourClub.goals}
-          awayScore={opponentClub.goals}
-        />
-        
+        <MatchScoreDisplay matchData={matchData} />
         <TopPerformerCard player={topPerformer} />
         
         {match.timeAgo && (

@@ -6,7 +6,9 @@ import { TimeStamp } from '@/components/atoms/TimeStamp';
 import { MatchScoreDisplay } from '@/components/molecules/MatchScoreDisplay';
 import { PlayerPerformanceTable } from '@/components/organisms/PlayerPerformance/PlayerPerformanceTable';
 import { MatchStatsSummary } from '@/components/organisms/MatchStatsSummary/MatchStatsSummary';
-import { Match, MatchPlayer } from '@/types/match';
+import { Match, MatchPlayer, MatchDisplay } from '@/types/match';
+import { Button } from "@/components/ui/button"
+
 
 interface MatchDetailLayoutProps {
   match: Match;
@@ -19,6 +21,17 @@ export const MatchDetailLayout: React.FC<MatchDetailLayoutProps> = ({ match, clu
   const ourClub = match.clubs[clubIdStr];
   const opponentClubId = Object.keys(match.clubs).find(id => id !== clubIdStr);
   const opponentClub = opponentClubId ? match.clubs[opponentClubId] : null;
+
+  const matchData: MatchDisplay = {
+    homeTeam: {
+      name: ourClub.details.name,
+      score: ourClub.goals
+    },
+    awayTeam: {
+      name: opponentClub?.details.name || '',
+      score: opponentClub?.goals || ''
+    }
+  };
   
   if (!ourClub || !opponentClub) return null;
   
@@ -50,28 +63,24 @@ export const MatchDetailLayout: React.FC<MatchDetailLayoutProps> = ({ match, clu
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <button 
-          onClick={onBack}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-        >
+        <Button onClick={onBack} className="hover:cursor-pointer">
           ← Back to Match History
-        </button>
+        </Button>
         <MatchResultBadge result={ourClub.result} />
       </div>
 
       <StatCard 
-        title={`Match Details - ${match.timestamp ? 
-          <TimeStamp timestamp={match.timestamp} /> : 
-          "Unknown Date"}`}
+        title={
+          <>
+            Match Details - {match.timestamp ? <TimeStamp timestamp={match.timestamp} /> : "Unknown Date"}
+          </>
+        }
         description={`${ourClub.details.name} vs ${opponentClub.details.name}`}
       >
         <div className="space-y-6">
           <div className="py-4 border-b border-gray-200 dark:border-gray-700">
             <MatchScoreDisplay 
-              homeTeam={ourClub.details.name}
-              awayTeam={opponentClub.details.name}
-              homeScore={ourClub.goals}
-              awayScore={opponentClub.goals}
+              matchData={matchData}
               size="lg"
             />
           </div>

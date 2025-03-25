@@ -129,3 +129,14 @@ export interface TopPerformer {
   goals: string;
   assists: string;
 }
+
+// No way at the moment to determine the true home/away team
+export interface MatchDisplay {
+  homeTeam: MatchDisplayTeam;
+  awayTeam: MatchDisplayTeam;
+}
+
+export interface MatchDisplayTeam {
+  name: string;
+  score: string;
+}
