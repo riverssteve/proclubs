@@ -80,12 +80,18 @@ export interface ClubDetails {
   customKit?: CustomKit;
 }
 
+export enum MatchResult {
+  win,
+  loss,
+  draw,
+}
+
 export interface Club {
   date: string;
   gameNumber: string;
   goals: string;
   goalsAgainst: string;
-  result: string;
+  result: MatchResult;
   score: string;
   matchType?: string;
   ties?: string;

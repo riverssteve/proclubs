@@ -1,18 +1,19 @@
-// /atoms/MatchResultBadge.tsx
 import React from 'react';
+import { MatchResult } from '@/types/match'
 
 interface MatchResultBadgeProps {
-  result: string;
+  result: MatchResult;
 }
 
 export const MatchResultBadge: React.FC<MatchResultBadgeProps> = ({ result }) => {
   let text: string, bgColor: string, textColor: string;
   
-  if (result === "1") {
+  console.log(`MatchResultBadge: result=${result}`);
+  if (result === MatchResult.win ) {
     text = "WIN";
     bgColor = "bg-score-win-primary";
     textColor = "text-score-win-foreground";
-  } else if (result === "0") {
+  } else if (result === MatchResult.draw) {
     text = "DRAW";
     bgColor = "bg-score-draw-primary";
     textColor = "text-score-draw-foreground";
