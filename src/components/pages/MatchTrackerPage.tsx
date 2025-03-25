@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { MatchHistoryList } from '@/components/templates/MatchHistoryList';
 import { MatchDetailLayout } from '@/components/templates/MatchDetailLayout';
-import { Match } from '@/types/match';
+import { Match, MatchResult } from '@/types/match';
 
 // Royal Rumballers club ID
 const CLUB_ID = 287755;
@@ -18,7 +18,7 @@ export const MatchTrackerPage: React.FC = () => {
     const loadData = async (): Promise<void> => {
       // TODO: Make this configurable via UI with a max result
       const matchType = 'leagueMatch';
-      const maxResultCount = 5;
+      const maxResultCount = 8;
       try {
         setLoading(true);
         const apiUrl = `/api/proclubs/matches?platform=common-gen5&clubId=${CLUB_ID}&matchType=${matchType}&maxResultCount=${maxResultCount}`;
@@ -67,7 +67,7 @@ export const MatchTrackerPage: React.FC = () => {
             "goalsAgainst": "2",
             "losses": "0",
             "matchType": "1",
-            "result": "1",
+            "result": MatchResult.win,
             "score": "3",
             "ties": "0",
             "winnerByDnf": "0",
@@ -89,7 +89,7 @@ export const MatchTrackerPage: React.FC = () => {
             "goalsAgainst": "3",
             "losses": "1",
             "matchType": "1",
-            "result": "2",
+            "result": MatchResult.loss,
             "score": "2",
             "ties": "0",
             "winnerByDnf": "0",
