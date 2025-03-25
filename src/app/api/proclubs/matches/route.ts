@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Match } from "@/types/match";
+import { Match, MatchResult } from "@/types/match";
 
 export const runtime = "edge";
 
@@ -47,10 +47,41 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data: Match[] = await response.json();
+    const rawData: any[] = await response.json();
+
+    // Map the raw data to the Match type, picking only the fields we want
+    const data: Match[] = rawData.map((match: any) => ({
+      matchId: match.matchId,
+      timestamp: match.timestamp,
+      timeAgo: match.timeAgo,
+      clubs: Object.entries(match.clubs).reduce((acc: any, [clubId, clubData]: [string, any]) => {
+      acc[clubId] = {
+        date: clubData.date,
+        gameNumber: clubData.gameNumber,
+        goals: clubData.goals,
+        goalsAgainst: clubData.goalsAgainst,
+        score: clubData.score,
+        matchType: clubData.matchType,
+        ties: clubData.ties,
+        wins: clubData.wins,
+        losses: clubData.losses,
+        details: clubData.details,
+        winnerByDnf: clubData.winnerByDnf,
+        result: clubData.wins > clubData.losses
+          ? MatchResult.win
+          : clubData.wins < clubData.losses
+          ? MatchResult.loss
+          : MatchResult.draw,
+      };
+      return acc;
+      }, {}),
+      players: match.players,
+      aggregate: match.aggregate,
+    }));
+
     return NextResponse.json(data, {
       headers: {
-        "Cache-Control": "max-age=300", // Cache for 5 minutes
+      "Cache-Control": "max-age=300", // Cache for 5 minutes
       },
     });
   } catch (error) {
