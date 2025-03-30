@@ -135,7 +135,7 @@ export const PlayerComparison: React.FC<PlayerComparisonProps> = ({
       <ChartBar
         data={getComparisonData()}
         layout="vertical"
-        margin={{ left: 60, right: 30 }}
+        margin={{ left: 60, right: 40 }}
         chartConfig={chartConfig}
       />
     </StatCard>
