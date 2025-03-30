@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/ui/chart";
 
 interface DataPoint {
   name: string;
   value: number;
   position?: string;
+}
+
+interface ChartConfig {
+  [key: string]: {
+    label: string;
+    color: string;
+    formatter?: (value: number) => string;
+  }
 }
 
 interface ChartBarProps {
@@ -19,6 +27,25 @@ interface ChartBarProps {
   chartConfig?: ChartConfig;
 }
 
+const getTickSize = (maxValue: number, numberOfTicks: number): number => {
+  const rawTickSize = maxValue / numberOfTicks;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(rawTickSize)));
+  
+  const normalizedTickSize = rawTickSize / magnitude;
+  
+  // Choose a nice rounded number as multiplier
+  let niceFactor;
+  if (normalizedTickSize < 1.5) niceFactor = 1;
+  else if (normalizedTickSize < 3) niceFactor = 2;
+  else if (normalizedTickSize < 7) niceFactor = 5;
+  else niceFactor = 10;
+
+  console.log("niceFactor", niceFactor);
+  console.log("magnitude", magnitude);
+  
+  return niceFactor * magnitude;
+};
+
 export const ChartBar: React.FC<ChartBarProps> = ({
   data,
   dataKey = "value",
@@ -26,7 +53,7 @@ export const ChartBar: React.FC<ChartBarProps> = ({
   showLabels = true,
   hideAxis = false,
   height = 300,
-  margin = { left: 60, right: 30 },
+  margin = { left: 60, right: 35 },
   chartConfig = {
     value: {
       label: "Value",
@@ -34,6 +61,34 @@ export const ChartBar: React.FC<ChartBarProps> = ({
     },
   },
 }) => {
+  const customTicks = useMemo(() => {
+    if (!data.length) return [];
+
+    // Find max value
+    const maxValue = Math.max(...data.map((d) => d.value));
+
+    // If it's a percentage, use regular increments of 10
+    if (
+      chartConfig.value.label.toLowerCase().includes("rate") ||
+      chartConfig.value.label.toLowerCase().includes("percentage")
+    ) {
+      return [0, 20, 40, 60, 80, 100];
+    }
+
+    // Otherwise, create reasonable ticks based on max value
+    const numberOfTicks = 4; // Desired number of ticks
+    const tickSize = getTickSize(maxValue, numberOfTicks);
+
+    const ticks = [];
+    for (let i = 0; i <= numberOfTicks; i++) {
+      ticks.push(Math.round(i * tickSize * 100) / 100); // Round to 2 decimal places
+    }
+
+    console.log("ticks", ticks);
+
+    return ticks;
+  }, [data, chartConfig.value.label]);
+
   return (
     <ChartContainer config={chartConfig}>
       <BarChart
@@ -48,6 +103,7 @@ export const ChartBar: React.FC<ChartBarProps> = ({
           dataKey={layout === "vertical" ? dataKey : "name"}
           domain={layout === "vertical" ? [0, "dataMax"] : undefined}
           tickCount={5}
+          ticks={customTicks}
           interval={0}
           hide={hideAxis}
         />
@@ -71,8 +127,9 @@ export const ChartBar: React.FC<ChartBarProps> = ({
               fontSize={12}
               formatter={(value: number) => {
                 if (value <= 0) return "";
-                // Check if value has decimal part
-                return value % 1 !== 0 ? value.toFixed(1) : value;
+                return chartConfig.value.formatter
+                  ? chartConfig.value.formatter(value)
+                  : value.toFixed(1);
               }}
             />
           )}
