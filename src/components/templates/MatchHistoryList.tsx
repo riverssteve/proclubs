@@ -1,6 +1,6 @@
-import React from 'react';
-import { MatchCard } from '@/components/organisms/MatchCard/MatchCard';
-import { Match, TopPerformer, MatchPlayer } from '@/types/match';
+import React from "react";
+import { MatchCard } from "@/components/organisms/MatchCard/MatchCard";
+import { Match, TopPerformer, MatchPlayer } from "@/types/match";
 
 interface MatchHistoryListProps {
   matches: Match[];
@@ -8,7 +8,11 @@ interface MatchHistoryListProps {
   onSelectMatch: (match: Match) => void;
 }
 
-export const MatchHistoryList: React.FC<MatchHistoryListProps> = ({ matches, clubId, onSelectMatch }) => {
+export const MatchHistoryList: React.FC<MatchHistoryListProps> = ({
+  matches,
+  clubId,
+  onSelectMatch,
+}) => {
   // Get top performer from a match
   const getTopPerformer = (match: Match): TopPerformer | null => {
     const clubIdStr = clubId.toString();
@@ -21,19 +25,19 @@ export const MatchHistoryList: React.FC<MatchHistoryListProps> = ({ matches, clu
     const sortedPlayers = [...players].sort((a, b) => {
       const ratingDiff = parseFloat(b.rating) - parseFloat(a.rating);
       if (ratingDiff !== 0) return ratingDiff;
-      
-      const goalsDiff = parseInt(b.goals || '0') - parseInt(a.goals || '0');
+
+      const goalsDiff = parseInt(b.goals || "0") - parseInt(a.goals || "0");
       if (goalsDiff !== 0) return goalsDiff;
-      
-      return parseInt(b.assists || '0') - parseInt(a.assists || '0');
+
+      return parseInt(b.assists || "0") - parseInt(a.assists || "0");
     });
 
     const topPlayer = sortedPlayers[0];
     return {
       name: topPlayer.playername,
       rating: topPlayer.rating,
-      goals: topPlayer.goals || '0',
-      assists: topPlayer.assists || '0'
+      goals: topPlayer.goals || "0",
+      assists: topPlayer.assists || "0",
     };
   };
 

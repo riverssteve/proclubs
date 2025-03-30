@@ -1,1 +1,1 @@
-export * from './MatchResultBadge';
+export * from "./MatchResultBadge";

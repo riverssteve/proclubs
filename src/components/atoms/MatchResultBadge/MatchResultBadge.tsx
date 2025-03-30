@@ -1,13 +1,15 @@
-import React from 'react';
-import { MatchResult } from '@/types/match'
+import React from "react";
+import { MatchResult } from "@/types/match";
 
 interface MatchResultBadgeProps {
   result: MatchResult;
 }
 
-export const MatchResultBadge: React.FC<MatchResultBadgeProps> = ({ result }) => {
+export const MatchResultBadge: React.FC<MatchResultBadgeProps> = ({
+  result,
+}) => {
   let text: string, bgColor: string, textColor: string;
-  if (result === MatchResult.win ) {
+  if (result === MatchResult.win) {
     text = "WIN";
     bgColor = "bg-score-win-primary";
     textColor = "text-score-win-foreground";
@@ -22,9 +24,10 @@ export const MatchResultBadge: React.FC<MatchResultBadgeProps> = ({ result }) =>
   }
 
   return (
-    <span className={`px-3 py-1 rounded-full text-sm font-bold ${bgColor} ${textColor}`}>
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-bold ${bgColor} ${textColor}`}
+    >
       {text}
     </span>
   );
 };
-
