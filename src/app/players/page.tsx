@@ -1,8 +1,7 @@
 import React from "react";
 import PlayerStatsDashboard from "@/components/pages/PlayerStatsDashboard";
 import Link from "next/link";
-import { Button } from "@/components/ui/button"
-
+import { Button } from "@/components/ui/button";
 
 export default function PlayersPage(): React.ReactNode {
   return (

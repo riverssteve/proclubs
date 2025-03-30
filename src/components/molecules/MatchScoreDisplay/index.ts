@@ -1,1 +1,1 @@
-export * from './MatchScoreDisplay';
+export * from "./MatchScoreDisplay";

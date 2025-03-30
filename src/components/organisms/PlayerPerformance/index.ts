@@ -1,1 +1,1 @@
-export * from "./PlayerPerformanceTable"; 
+export * from "./PlayerPerformanceTable";

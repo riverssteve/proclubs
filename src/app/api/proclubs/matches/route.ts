@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Club, ClubDetails, Match, MatchResult, MatchPlayer, AggregateStats, TimeAgo} from "@/types/match";
+import {
+  Club,
+  ClubDetails,
+  Match,
+  MatchResult,
+  MatchPlayer,
+  AggregateStats,
+  TimeAgo,
+} from "@/types/match";
 
 export const runtime = "edge";
 
 // Define the base URL for the EA Sports FC API
 const API_BASE_URL = "https://proclubs.ea.com/api/fc/clubs";
-
 
 interface RawClubData {
   date: string;
@@ -41,7 +48,9 @@ interface ErrorResponse {
   details?: string;
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse<Match[] | ErrorResponse>> {
+export async function GET(
+  request: NextRequest,
+): Promise<NextResponse<Match[] | ErrorResponse>> {
   try {
     // Get query parameters
     const searchParams = request.nextUrl.searchParams;
@@ -54,9 +63,10 @@ export async function GET(request: NextRequest): Promise<NextResponse<Match[] | 
     if (!platform || !clubId) {
       return NextResponse.json(
         {
-          error: "Missing required parameters: platform and clubId are required",
+          error:
+            "Missing required parameters: platform and clubId are required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -64,19 +74,19 @@ export async function GET(request: NextRequest): Promise<NextResponse<Match[] | 
     const path = `${API_BASE_URL}/matches?platform=${platform}&clubIds=${clubId}${
       matchType ? `&matchType=${matchType}` : ""
     }${maxResultCount ? `&maxResultCount=${maxResultCount}` : ""}`;
-    
+
     console.log(`Fetching club data from: ${path}`);
-    
+
     const headers = {
       Accept: "application/json",
     };
 
     // Fetch data from EA API
     const response = await fetch(path, { headers });
-    
+
     if (!response.ok) {
       throw new Error(
-        `EA API returned ${response.status}: ${response.statusText}`
+        `EA API returned ${response.status}: ${response.statusText}`,
       );
     }
 
@@ -86,7 +96,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<Match[] | 
     const data: Match[] = rawData.map((match: RawMatchData) => {
       // Create a properly typed clubs object
       const clubs: Record<string, Club> = {};
-      
+
       // Process each club entry properly - keep strings as strings according to your Club interface
       Object.entries(match.clubs).forEach(([clubId, clubData]) => {
         clubs[clubId] = {
@@ -100,18 +110,19 @@ export async function GET(request: NextRequest): Promise<NextResponse<Match[] | 
           wins: clubData.wins,
           losses: clubData.losses,
           details: clubData.details,
-          winnerByDnf: typeof clubData.winnerByDnf === 'boolean' 
-            ? String(clubData.winnerByDnf) 
-            : clubData.winnerByDnf,
-          result: 
+          winnerByDnf:
+            typeof clubData.winnerByDnf === "boolean"
+              ? String(clubData.winnerByDnf)
+              : clubData.winnerByDnf,
+          result:
             parseInt(clubData.wins) > parseInt(clubData.losses)
               ? MatchResult.win
               : parseInt(clubData.wins) < parseInt(clubData.losses)
-              ? MatchResult.loss
-              : MatchResult.draw,
+                ? MatchResult.loss
+                : MatchResult.draw,
         };
       });
-      
+
       // Return the properly structured match object
       return {
         matchId: match.matchId,
@@ -135,7 +146,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<Match[] | 
         error: "Failed to fetch club data",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

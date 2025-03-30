@@ -1,14 +1,15 @@
-import React from 'react';
+import React from "react";
 import Image from "next/image";
-import { MatchDisplay } from '@/types/match';
+import { MatchDisplay } from "@/types/match";
 
 interface MatchScoreDisplayProps {
   matchData: MatchDisplay;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 
-export const MatchScoreDisplay: React.FC<MatchScoreDisplayProps> = ({ 
-  matchData, size = 'md'
+export const MatchScoreDisplay: React.FC<MatchScoreDisplayProps> = ({
+  matchData,
+  size = "md",
 }) => {
   console.log(`size: ${size}`);
   return (
@@ -41,14 +42,14 @@ export const MatchScoreDisplay: React.FC<MatchScoreDisplayProps> = ({
       <div className="flex flex-col items-center">
         <div className="w-16 h-16 flex items-center justify-center mb-2">
           <span className="text-xl font-bold">
-              <Image
-                src="/team-unknown.png"
-                alt="Unknown Logo"
-                width={200}
-                height={200}
-                priority
-              />
-            </span>
+            <Image
+              src="/team-unknown.png"
+              alt="Unknown Logo"
+              width={200}
+              height={200}
+              priority
+            />
+          </span>
         </div>
         <span className="text-sm font-semibold text-center">
           {matchData.awayTeam.name}
