@@ -1,9 +1,9 @@
-import React from 'react';
-import { StatCard } from '@/components/molecules/StatCard';
-import { ChartBar } from '@/components/organisms/charts';
-import { StatSelect, StatOption } from '@/components/molecules/StatSelect';
-import { GameAverageToggle } from '@/components/atoms/GameAverageToggle';
-import { calculatePer90Value } from '@/utils/PlayerStatsUtils';
+import React from "react";
+import { StatCard } from "@/components/molecules/StatCard";
+import { ChartBar } from "@/components/organisms/charts";
+import { StatSelect, StatOption } from "@/components/molecules/StatSelect";
+import { GameAverageToggle } from "@/components/atoms/GameAverageToggle";
+import { calculatePer90Value } from "@/utils/PlayerStatsUtils";
 
 export interface PlayerStats {
   name: string;
@@ -35,47 +35,52 @@ export const PlayerComparison: React.FC<PlayerComparisonProps> = ({
   isPer90,
   setIsPer90,
   statOptions,
-  className = ""
+  className = "",
 }) => {
   // Calculate comparison value based on current setting
-  const calculateComparisonValue = (player: PlayerStats, statKey: string): number => {
+  const calculateComparisonValue = (
+    player: PlayerStats,
+    statKey: string,
+  ): number => {
     const rawValue = parseFloat(player[statKey]) || 0;
-    
+
     // If per-90 is not enabled, or the stat isn't compatible with per-90 calculations,
     // return the raw value
     if (!isPer90 || !isPer90CompatibleStat(statKey)) {
       return rawValue;
     }
-    
+
     // Use the shared utility function to calculate per-90 value
     return calculatePer90Value(rawValue, player.gamesPlayed);
   };
-  
+
   // Check if a stat is compatible with per-90 calculations
   const isPer90CompatibleStat = (statKey: string): boolean => {
-    const option = statOptions.find(opt => opt.value === statKey);
+    const option = statOptions.find((opt) => opt.value === statKey);
     return option ? option.isPer90Compatible : false;
   };
 
   // Get comparison data for chart
   const getComparisonData = (): ComparisonDataPoint[] => {
-    return players.map(player => ({
-      name: player.name,
-      value: calculateComparisonValue(player, comparisonStat),
-      position: player.favoritePosition
-    })).sort((a, b) => b.value - a.value);
+    return players
+      .map((player) => ({
+        name: player.name,
+        value: calculateComparisonValue(player, comparisonStat),
+        position: player.favoritePosition,
+      }))
+      .sort((a, b) => b.value - a.value);
   };
 
   // Get selected stat display name
   const getSelectedStatLabel = (): string => {
-    const option = statOptions.find(opt => opt.value === comparisonStat);
+    const option = statOptions.find((opt) => opt.value === comparisonStat);
     const baseName = option?.label || "Value";
-    
+
     // If per-90 is enabled and the stat supports it, add "per 90" to the label
     if (isPer90 && isPer90CompatibleStat(comparisonStat)) {
       return `${baseName} (per 90)`;
     }
-    
+
     return baseName;
   };
 
@@ -88,26 +93,26 @@ export const PlayerComparison: React.FC<PlayerComparisonProps> = ({
         if (isPer90 && isPer90CompatibleStat(comparisonStat)) {
           return value.toFixed(2);
         }
-        
+
         // For percentages, round to whole number
-        if (comparisonStat.includes('Rate')) {
-          return Math.round(value) + '%';
+        if (comparisonStat.includes("Rate")) {
+          return Math.round(value) + "%";
         }
-        
+
         // For rating, show 1 decimal place
-        if (comparisonStat === 'ratingAve') {
+        if (comparisonStat === "ratingAve") {
           return value.toFixed(1);
         }
-        
+
         // Default to rounded value for non-per-90 stats
         return isPer90 ? value.toFixed(2) : Math.round(value).toString();
-      }
-    }
+      },
+    },
   };
 
   return (
-    <StatCard 
-      title="Players Comparison" 
+    <StatCard
+      title="Players Comparison"
       description="Compare players across different statistics"
       className={className}
     >
@@ -118,7 +123,7 @@ export const PlayerComparison: React.FC<PlayerComparisonProps> = ({
           options={statOptions}
           className="flex-grow"
         />
-        
+
         <GameAverageToggle
           isPer90={isPer90}
           setIsPer90={setIsPer90}
@@ -127,9 +132,9 @@ export const PlayerComparison: React.FC<PlayerComparisonProps> = ({
         />
       </div>
 
-      <ChartBar 
-        data={getComparisonData()} 
-        layout="vertical" 
+      <ChartBar
+        data={getComparisonData()}
+        layout="vertical"
         margin={{ left: 60, right: 30 }}
         chartConfig={chartConfig}
       />

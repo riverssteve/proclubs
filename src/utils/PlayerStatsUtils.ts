@@ -51,29 +51,50 @@ export const DEFAULT_STAT_OPTIONS: StatOption[] = [
   { value: "winRate", label: "Win Rate (%)", isPer90Compatible: false },
   { value: "goals", label: "Goals", isPer90Compatible: true },
   { value: "assists", label: "Assists", isPer90Compatible: true },
-  { value: "shotSuccessRate", label: "Shot Success Rate (%)", isPer90Compatible: false },
-  { value: "passSuccessRate", label: "Pass Success Rate (%)", isPer90Compatible: false },
+  {
+    value: "shotSuccessRate",
+    label: "Shot Success Rate (%)",
+    isPer90Compatible: false,
+  },
+  {
+    value: "passSuccessRate",
+    label: "Pass Success Rate (%)",
+    isPer90Compatible: false,
+  },
   { value: "ratingAve", label: "Average Rating", isPer90Compatible: false },
-  { value: "tackleSuccessRate", label: "Tackle Success Rate (%)", isPer90Compatible: false },
+  {
+    value: "tackleSuccessRate",
+    label: "Tackle Success Rate (%)",
+    isPer90Compatible: false,
+  },
   { value: "proOverall", label: "Overall Rating", isPer90Compatible: false },
-  { value: "manOfTheMatch", label: "Man of the Match", isPer90Compatible: true },
+  {
+    value: "manOfTheMatch",
+    label: "Man of the Match",
+    isPer90Compatible: true,
+  },
   { value: "redCards", label: "Red Cards", isPer90Compatible: true },
   { value: "passesMade", label: "Passes Made", isPer90Compatible: true },
-  { value: "tacklesMade", label: "Tackles Made", isPer90Compatible: true }
+  { value: "tacklesMade", label: "Tackles Made", isPer90Compatible: true },
 ];
 
 // No mock data - we'll handle API failures with error messages
 
 // Calculate per-90 value for a stat
-export const calculatePer90Value = (statValue: string | number, gamesPlayed: string | number): number => {
-  const value = typeof statValue === 'string' ? parseFloat(statValue) : statValue;
-  const games = typeof gamesPlayed === 'string' ? parseFloat(gamesPlayed) : gamesPlayed;
-  
+export const calculatePer90Value = (
+  statValue: string | number,
+  gamesPlayed: string | number,
+): number => {
+  const value =
+    typeof statValue === "string" ? parseFloat(statValue) : statValue;
+  const games =
+    typeof gamesPlayed === "string" ? parseFloat(gamesPlayed) : gamesPlayed;
+
   if (isNaN(value) || isNaN(games) || games === 0) return 0;
-  
+
   // Assuming each game is 90 minutes
   const totalMinutesPlayed = games * 90;
-  
+
   // Calculate value per minute, then multiply by 90 to get per-90 rate
   return (value / totalMinutesPlayed) * 90;
 };
@@ -94,25 +115,27 @@ export const determinePlayerPosition = (posValue: number): string => {
 };
 
 // Process API response to calculate position counts
-export const processTeamData = (apiData: { members: PlayerStats[] }): TeamData => {
+export const processTeamData = (apiData: {
+  members: PlayerStats[];
+}): TeamData => {
   const positions: PositionCount = {
     midfielder: 0,
     goalkeeper: 0,
     forward: 0,
-    defender: 0
+    defender: 0,
   };
 
   // Add favorite position to each member and count positions
   apiData.members.forEach((member: PlayerStats) => {
     const favoritePosition = determinePlayerPosition(parseInt(member.proPos));
     member.favoritePosition = favoritePosition;
-    
+
     // Increment position count
     positions[favoritePosition as keyof PositionCount]++;
   });
 
   return {
     members: apiData.members,
-    positionCount: positions
+    positionCount: positions,
   };
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { StatCard } from '@/components/molecules/StatCard';
+import React from "react";
+import { StatCard } from "@/components/molecules/StatCard";
 
 interface PositionCount {
   midfielder: number;
@@ -15,18 +15,18 @@ interface PositionDistributionProps {
 
 export const PositionDistribution: React.FC<PositionDistributionProps> = ({
   positionCount,
-  className = ""
+  className = "",
 }) => {
   const positionColors: Record<string, string> = {
     forward: "#1e40af",
     midfielder: "#2563eb",
     defender: "#60a5fa",
-    goalkeeper: "#bfdbfe"
+    goalkeeper: "#bfdbfe",
   };
 
   return (
-    <StatCard 
-      title="Position Distribution" 
+    <StatCard
+      title="Position Distribution"
       description="Player positions in team"
       className={className}
     >

@@ -13,7 +13,7 @@ interface ChartConfig {
     label: string;
     color: string;
     formatter?: (value: number) => string;
-  }
+  };
 }
 
 interface ChartBarProps {
@@ -30,9 +30,9 @@ interface ChartBarProps {
 const getTickSize = (maxValue: number, numberOfTicks: number): number => {
   const rawTickSize = maxValue / numberOfTicks;
   const magnitude = Math.pow(10, Math.floor(Math.log10(rawTickSize)));
-  
+
   const normalizedTickSize = rawTickSize / magnitude;
-  
+
   // Choose a nice rounded number as multiplier
   let niceFactor;
   if (normalizedTickSize < 1.5) niceFactor = 1;
@@ -42,7 +42,7 @@ const getTickSize = (maxValue: number, numberOfTicks: number): number => {
 
   console.log("niceFactor", niceFactor);
   console.log("magnitude", magnitude);
-  
+
   return niceFactor * magnitude;
 };
 
