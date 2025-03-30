@@ -1,0 +1,4 @@
+{
+  "*.{[jt]s?(x),scss,md}": "prettier --write --ignore-unknown",
+  "*.[jt]s?(x)": "eslint --fix"
+}
