@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface FormattedStatValueProps {
   value: number;
@@ -7,11 +7,11 @@ interface FormattedStatValueProps {
   isPer90Compatible: boolean;
 }
 
-export const FormattedStatValue: React.FC<FormattedStatValueProps> = ({ 
-  value, 
-  statKey, 
-  isPer90, 
-  isPer90Compatible 
+export const FormattedStatValue: React.FC<FormattedStatValueProps> = ({
+  value,
+  statKey,
+  isPer90,
+  isPer90Compatible,
 }) => {
   // Format with appropriate precision based on stat type and settings
   const formattedValue = (): string => {
@@ -19,17 +19,17 @@ export const FormattedStatValue: React.FC<FormattedStatValueProps> = ({
     if (isPer90 && isPer90Compatible) {
       return value.toFixed(2);
     }
-    
+
     // For percentage values, maintain as integer with % sign
-    if (statKey.includes('Rate')) {
-      return Math.round(value).toString() + '%';
+    if (statKey.includes("Rate")) {
+      return Math.round(value).toString() + "%";
     }
-    
+
     // For average rating, show with one decimal place
-    if (statKey === 'ratingAve') {
+    if (statKey === "ratingAve") {
       return value.toFixed(1);
     }
-    
+
     // For other values, return as whole numbers
     return Math.round(value).toString();
   };

@@ -1,1 +1,1 @@
-export * from './PlayerStatsUtils';
+export * from "./PlayerStatsUtils";

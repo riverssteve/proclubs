@@ -1,1 +1,1 @@
-export * from './PlayerProfileCard';
+export * from "./PlayerProfileCard";

@@ -1,7 +1,13 @@
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PlayerProfileCard,  PlayerProfile } from '@/components/molecules/PlayerProfileCard';
-import { PlayerStatsCard, PlayerDetailedStats } from '@/components/molecules/PlayerStatsCard';
+import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  PlayerProfileCard,
+  PlayerProfile,
+} from "@/components/molecules/PlayerProfileCard";
+import {
+  PlayerStatsCard,
+  PlayerDetailedStats,
+} from "@/components/molecules/PlayerStatsCard";
 
 interface PlayerDetailTabsProps {
   player: PlayerProfile & PlayerDetailedStats;
@@ -12,7 +18,7 @@ interface PlayerDetailTabsProps {
 export const PlayerDetailTabs: React.FC<PlayerDetailTabsProps> = ({
   player,
   isPer90,
-  setIsPer90
+  setIsPer90,
 }) => {
   return (
     <Tabs defaultValue="profile" className="w-full">
@@ -29,10 +35,10 @@ export const PlayerDetailTabs: React.FC<PlayerDetailTabsProps> = ({
       </TabsContent>
 
       <TabsContent value="stats" className="space-y-4">
-        <PlayerStatsCard 
-          player={player} 
-          isPer90={isPer90} 
-          setIsPer90={setIsPer90} 
+        <PlayerStatsCard
+          player={player}
+          isPer90={isPer90}
+          setIsPer90={setIsPer90}
         />
       </TabsContent>
 
