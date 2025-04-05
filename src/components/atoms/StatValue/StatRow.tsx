@@ -1,8 +1,8 @@
-import React from "react";
+import React, { JSX } from "react";
 
 interface StatRowProps {
   label: string;
-  value: string | number;
+  value: string | number | JSX.Element;
   emphasis?: boolean;
   capitalize?: boolean;
   win?: boolean;
