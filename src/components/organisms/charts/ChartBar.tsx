@@ -67,14 +67,6 @@ export const ChartBar: React.FC<ChartBarProps> = ({
     // Find max value
     const maxValue = Math.max(...data.map((d) => d.value));
 
-    // If it's a percentage, use regular increments of 10
-    if (
-      chartConfig.value.label.toLowerCase().includes("rate") ||
-      chartConfig.value.label.toLowerCase().includes("percentage")
-    ) {
-      return [0, 20, 40, 60, 80, 100];
-    }
-
     // Otherwise, create reasonable ticks based on max value
     const numberOfTicks = 4; // Desired number of ticks
     const tickSize = getTickSize(maxValue, numberOfTicks);
