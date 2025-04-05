@@ -40,9 +40,6 @@ const getTickSize = (maxValue: number, numberOfTicks: number): number => {
   else if (normalizedTickSize < 7) niceFactor = 5;
   else niceFactor = 10;
 
-  console.log("niceFactor", niceFactor);
-  console.log("magnitude", magnitude);
-
   return niceFactor * magnitude;
 };
 
@@ -67,19 +64,39 @@ export const ChartBar: React.FC<ChartBarProps> = ({
     // Find max value
     const maxValue = Math.max(...data.map((d) => d.value));
 
-    // Otherwise, create reasonable ticks based on max value
-    const numberOfTicks = 4; // Desired number of ticks
-    const tickSize = getTickSize(maxValue, numberOfTicks);
+    // Start with minimum ticks and try until we find a suitable number
+    let desiredNumberOfTicks = 4;
+    const maxTicks = 7; // Set an upper limit to prevent too many ticks
 
+    let tickSize = 1;
+    let maxWithTicks;
+
+    // Iterate until we find a suitable number of ticks
+    while (desiredNumberOfTicks <= maxTicks) {
+      tickSize = getTickSize(maxValue, desiredNumberOfTicks);
+      maxWithTicks = tickSize * desiredNumberOfTicks;
+
+      // If this number of ticks is sufficient, break the loop
+      if (maxValue <= maxWithTicks) {
+        break;
+      }
+
+      // Otherwise, try with one more tick
+      desiredNumberOfTicks++;
+    }
+
+    // Generate ticks
     const ticks = [];
-    for (let i = 0; i <= numberOfTicks; i++) {
+    for (let i = 0; i <= desiredNumberOfTicks; i++) {
       ticks.push(Math.round(i * tickSize * 100) / 100); // Round to 2 decimal places
     }
 
+    console.log(
+      `Using ${desiredNumberOfTicks} ticks for max value ${maxValue}`,
+    );
     console.log("ticks", ticks);
-
     return ticks;
-  }, [data, chartConfig.value.label]);
+  }, [data]);
 
   return (
     <ChartContainer config={chartConfig}>
