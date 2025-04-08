@@ -149,11 +149,7 @@ const PlayerStatsDashboard: React.FC = () => {
 
       {/* Player Detail Tabs */}
       {selectedPlayer && (
-        <PlayerDetailTabs
-          player={selectedPlayer}
-          isPer90={isPer90}
-          setIsPer90={setIsPer90}
-        />
+        <PlayerDetailTabs player={selectedPlayer} isPer90={isPer90} />
       )}
     </div>
   );
