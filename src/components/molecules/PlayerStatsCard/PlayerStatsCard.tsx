@@ -2,7 +2,6 @@ import React from "react";
 import { StatRow } from "@/components/atoms/StatValue";
 import { StatCard } from "@/components/molecules/StatCard";
 import { FormattedStatValue } from "@/components/atoms/FormattedStatValue";
-import { GameAverageToggle } from "@/components/atoms/GameAverageToggle";
 
 export interface PlayerDetailedStats {
   name: string;
@@ -21,24 +20,14 @@ export interface PlayerDetailedStats {
 interface PlayerStatsCardProps {
   player: PlayerDetailedStats;
   isPer90: boolean;
-  setIsPer90: (value: boolean) => void;
 }
 
 export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
   player,
   isPer90,
-  setIsPer90,
 }) => {
   return (
     <>
-      <div className="mb-4 flex items-center justify-end">
-        <GameAverageToggle
-          isPer90={isPer90}
-          setIsPer90={setIsPer90}
-          label="Show Per 90 Minutes Stats"
-        />
-      </div>
-
       <StatCard
         title="Performance Statistics"
         description={`Detailed stats for ${player.name}${isPer90 ? " (per 90 minutes)" : ""}`}
@@ -55,7 +44,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.goals) || 0}
                     statKey="goals"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={true}
                   />
                 }
@@ -67,7 +56,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.assists) || 0}
                     statKey="assists"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={true}
                   />
                 }
@@ -79,7 +68,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.shotSuccessRate) || 0}
                     statKey="shotSuccessRate"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={false}
                   />
                 }
@@ -99,7 +88,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.passesMade) || 0}
                     statKey="passesMade"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={true}
                   />
                 }
@@ -111,7 +100,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.passSuccessRate) || 0}
                     statKey="passSuccessRate"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={false}
                   />
                 }
@@ -131,7 +120,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.tacklesMade) || 0}
                     statKey="tacklesMade"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={true}
                   />
                 }
@@ -143,7 +132,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                   <FormattedStatValue
                     value={parseFloat(player.tackleSuccessRate) || 0}
                     statKey="tackleSuccessRate"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={false}
                   />
                 }
@@ -161,7 +150,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({
                       ) || 0
                     }
                     statKey="cleanSheets"
-                    isPer90={isPer90}
+                    isPer90={false}
                     isPer90Compatible={true}
                   />
                 }
