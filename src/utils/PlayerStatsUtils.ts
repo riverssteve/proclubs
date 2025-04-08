@@ -23,6 +23,7 @@ export interface PlayerStats {
   manOfTheMatch: string;
   redCards: string;
   favoritePosition: string;
+  [key: string]: string;
 }
 
 export interface PositionCount {
@@ -70,8 +71,8 @@ export const DEFAULT_STAT_OPTIONS: StatOption[] = [
   { value: "proOverall", label: "Overall Rating", isPer90Compatible: false },
   {
     value: "manOfTheMatch",
-    label: "Man of the Match",
-    isPer90Compatible: true,
+    label: "Player of the Match",
+    isPer90Compatible: false,
   },
   { value: "redCards", label: "Red Cards", isPer90Compatible: true },
   { value: "passesMade", label: "Passes Made", isPer90Compatible: true },
