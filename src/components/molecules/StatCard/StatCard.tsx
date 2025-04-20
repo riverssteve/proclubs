@@ -10,7 +10,7 @@ import {
 
 interface StatCardProps {
   title: React.ReactNode;
-  description?: string;
+  description?: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
