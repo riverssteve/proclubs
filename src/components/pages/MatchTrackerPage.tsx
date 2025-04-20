@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { MatchHistoryList } from "@/components/templates/MatchHistoryList";
 import { MatchDetailLayout } from "@/components/templates/MatchDetailLayout";
+import {
+  MatchTypeToggle,
+  MatchType,
+} from "@/components/molecules/MatchTypeToggle";
 import { Match, MatchResult } from "@/types/match";
 
 // Royal Rumballers club ID
@@ -13,44 +17,49 @@ export const MatchTrackerPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+  const [matchType, setMatchType] = useState<MatchType>("leagueMatch");
+  const maxResultCount = 8; // Fixed value for now
+
+  const fetchMatches = async () => {
+    try {
+      setLoading(true);
+      const apiUrl = `/api/proclubs/matches?platform=common-gen5&clubId=${CLUB_ID}&matchType=${matchType}&maxResultCount=${maxResultCount}`;
+
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch data: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      const responseData = (await response.json()) as Match[];
+      setMatches(responseData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error loading data:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      setError(`Failed to load match data: ${errorMessage}`);
+      setLoading(false);
+
+      // Fall back to mock data
+      setMatches(getMockData());
+    }
+  };
 
   useEffect(() => {
-    const loadData = async (): Promise<void> => {
-      // TODO: Make this configurable via UI with a max result
-      const matchType = "leagueMatch";
-      const maxResultCount = 8;
-      try {
-        setLoading(true);
-        const apiUrl = `/api/proclubs/matches?platform=common-gen5&clubId=${CLUB_ID}&matchType=${matchType}&maxResultCount=${maxResultCount}`;
+    fetchMatches(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchType]); // Re-fetch when match type changes
 
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: { Accept: "application/json" },
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch data: ${response.status} ${response.statusText}`,
-          );
-        }
-
-        const responseData = (await response.json()) as Match[];
-        setMatches(responseData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error loading data:", error);
-        const errorMessage =
-          error instanceof Error ? error.message : "Unknown error";
-        setError(`Failed to load match data: ${errorMessage}`);
-        setLoading(false);
-
-        // Fall back to mock data
-        setMatches(getMockData());
-      }
-    };
-
-    loadData();
-  }, []);
+  // Handle match type change
+  const handleMatchTypeChange = (type: MatchType) => {
+    setSelectedMatch(null); // Clear selected match when changing types
+    setMatchType(type);
+  };
 
   // Mock data function (simplified for this example)
   const getMockData = (): Match[] => {
@@ -170,7 +179,15 @@ export const MatchTrackerPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Match History</h1>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold mb-4 md:mb-0">Match History</h1>
+        {!selectedMatch && (
+          <MatchTypeToggle
+            currentType={matchType}
+            onTypeChange={handleMatchTypeChange}
+          />
+        )}
+      </div>
 
       {error && (
         <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">

@@ -38,6 +38,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({
     },
   };
 
+  // Helper function to format match type
+  const getMatchTypeLabel = (): string => {
+    if (ourClub.matchType === "2") return "Playoff Match";
+    if (ourClub.matchType === "1") return "League Match";
+    return "Playoff Match";
+  };
+
   if (!ourClub || !opponentClub) return null;
 
   return (
@@ -48,7 +55,14 @@ export const MatchCard: React.FC<MatchCardProps> = ({
           <MatchResultBadge result={ourClub.result} />
         </div>
       }
-      description={`vs ${opponentClub.details.name}`}
+      description={
+        <div className="flex justify-between items-center">
+          <span>vs {opponentClub.details.name}</span>
+          <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+            {getMatchTypeLabel()}
+          </span>
+        </div>
+      }
       onClick={() => onSelect(match)}
       className="cursor-pointer hover:shadow-md transition-shadow"
     >

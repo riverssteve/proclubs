@@ -11,6 +11,17 @@ export const MatchStatsSummary: React.FC<MatchStatsSummaryProps> = ({
   match,
   ourClub,
 }) => {
+  // Format match type for display
+  const getMatchTypeDisplay = (): string => {
+    // If matchType is available directly
+    if (ourClub.matchType) {
+      if (ourClub.matchType === "1") return "League Match";
+      if (ourClub.matchType === "2") return "Playoff Match";
+      return "Friendly Match";
+    }
+    return "Unknown Match Type";
+  };
+
   return (
     <div>
       <h3 className="text-xl font-bold mb-3">Match Statistics</h3>
@@ -20,10 +31,7 @@ export const MatchStatsSummary: React.FC<MatchStatsSummaryProps> = ({
           value={ourClub.details.customKit?.stadName || "Unknown Stadium"}
         />
         <StatRow label="Match ID" value={match.matchId} />
-        <StatRow
-          label="Match Type"
-          value={ourClub.matchType === "1" ? "League Match" : "Friendly"}
-        />
+        <StatRow label="Match Type" value={getMatchTypeDisplay()} />
         {match.timeAgo && (
           <StatRow
             label="Played"

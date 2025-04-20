@@ -24,15 +24,12 @@ const PlayerStatsDashboard: React.FC = () => {
   const [isPer90, setIsPer90] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("Component mounted, fetching data");
-
     const loadData = async (): Promise<void> => {
       try {
         setLoading(true);
 
         // Use the internal API route
         const apiUrl = `/api/proclubs?platform=common-gen5&clubId=${CLUB_ID}`;
-        console.log(`Fetching data from: ${apiUrl}`);
 
         // Fetch data through our Next.js API route
         const response = await fetch(apiUrl, {
