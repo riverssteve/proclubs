@@ -8,9 +8,7 @@ import {
   MatchType,
 } from "@/components/molecules/MatchTypeToggle";
 import { Match, MatchResult } from "@/types/match";
-
-// Royal Rumballers club ID
-const CLUB_ID = 287755;
+import { CLUB_ID } from "@/config/club";
 
 export const MatchTrackerPage: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
@@ -107,7 +105,7 @@ export const MatchTrackerPage: React.FC = () => {
             winnerByDnf: "0",
             wins: "0",
             details: {
-              name: "RoyalRumballers",
+              name: "BigfootBallclub",
               clubId: 287755,
               regionId: 4344147,
               teamId: 1808,
