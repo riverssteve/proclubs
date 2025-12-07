@@ -45,7 +45,7 @@ export interface StatOption {
 }
 
 // Constants
-export const CLUB_ID = 287755;
+export const CLUB_ID = 219778;
 
 // Default stat options
 export const DEFAULT_STAT_OPTIONS: StatOption[] = [
