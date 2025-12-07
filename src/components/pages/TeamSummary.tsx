@@ -7,9 +7,7 @@ import { Button } from "@/components/ui/button";
 import { StatRow } from "@/components/atoms/StatValue";
 import { StatCard } from "@/components/molecules/StatCard";
 import { ChartPie } from "@/components/organisms/charts";
-
-// Royal Rumballers club ID
-const CLUB_ID = 287755;
+import { CLUB_ID, CLUB_CONFIG } from "@/config/club";
 
 // Define types for our data structures
 interface TeamStats {
@@ -225,14 +223,14 @@ const TeamSummary: React.FC = () => {
         <div className="mb-8">
           <Image
             src="/team-logo.png"
-            alt="Royal Rumballers Logo"
+            alt={`${CLUB_CONFIG.name} Logo`}
             width={200}
             height={200}
             priority
           />
         </div>
         <h1 className="text-4xl font-extrablack mb-7 text-center">
-          Royal Rumballers
+          {CLUB_CONFIG.name}
         </h1>
         <div className="flex space-x-4 justify-center">
           <Link href="/players">

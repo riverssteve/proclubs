@@ -19,7 +19,7 @@ export const MatchScoreDisplay: React.FC<MatchScoreDisplayProps> = ({
           <span className="text-xl font-bold">
             <Image
               src="/team-logo.png"
-              alt="RoyalRumballers Logo"
+              alt="BigfootBallclub Logo"
               width={200}
               height={200}
               priority
